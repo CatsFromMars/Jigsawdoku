@@ -1,4 +1,4 @@
-Shader "Custom/Sprites/Additive (Colorable)"
+Shader "Custom/Sprites/Alpha Blend (Colorable)"
 {
 	Properties
 	{
@@ -22,7 +22,7 @@ Shader "Custom/Sprites/Additive (Colorable)"
 		Lighting Off
 		ZWrite Off
 		Fog { Mode Off }
-		Blend SrcAlpha One
+		Blend SrcAlpha OneMinusSrcAlpha
 
 		Pass
 		{
