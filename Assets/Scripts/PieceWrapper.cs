@@ -10,6 +10,7 @@ public class PieceWrapper : MonoBehaviour {
     
     public Font font;
     public Color color;
+    public Material tileMaterial;
 
     public Serializable2DIntArray[] serializablePieceNumbers;
 
@@ -45,9 +46,30 @@ public class PieceWrapper : MonoBehaviour {
         backContainer.transform.parent = transform;
 
         int[,] pieceNumbers = piece.to2DArray();
+        tileMaterial.color = color;
+        float scale = 1.16f;
+
         for (int i = 0; i < pieceNumbers.GetLength(0); i++) {
             for (int j = 0; j < pieceNumbers.GetLength(1); j++) {
                 // Create quads under non-zero numbers
+                if (pieceNumbers[i,j] != 0) {
+                    GameObject quad = GameObject.CreatePrimitive(PrimitiveType.Quad);
+                    quad.transform.parent = backContainer.transform;
+
+                    quad.transform.localScale = new Vector3(scale*0.95f, scale*0.95f, 1);
+                    quad.transform.localPosition = new Vector3(0.32f + j*scale, -0.45f - i*scale, 0);
+
+                    quad.renderer.material = tileMaterial;
+
+                    // Outline quad
+                    GameObject quad2 = GameObject.CreatePrimitive(PrimitiveType.Quad);
+                    quad2.transform.parent = backContainer.transform;
+                    
+                    quad2.transform.localScale = new Vector3(scale, scale, 1);
+                    quad2.transform.localPosition = new Vector3(0.32f + j*scale, -0.45f - i*scale, 1);
+
+                    quad2.renderer.material.color = color;
+                }
             }
         }
     }
