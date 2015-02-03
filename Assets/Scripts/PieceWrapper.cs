@@ -13,9 +13,7 @@ public class PieceWrapper : MonoBehaviour {
     public Serializable2DIntArray[] serializablePieceNumbers;
 
     private Piece piece;
-    //private TextMesh text;
     private GameObject numberContainer;
-    //private GameObject backContainer;
 
     void Start() {
         piece = Piece.fromSerializable2DIntArray(serializablePieceNumbers);
@@ -28,13 +26,14 @@ public class PieceWrapper : MonoBehaviour {
         
         for (int i = 0; i < pieceNumbers.GetLength(0); i++) {
             for (int j = 0; j < pieceNumbers.GetLength(1); j++) {
-                // Create quads under non-zero numbers
+                // Create quads for non-zero numbers
                 if (pieceNumbers[i,j] >= 1 && pieceNumbers[i,j] <= 9) {
                     GameObject quad = GameObject.CreatePrimitive(PrimitiveType.Quad);
                     quad.transform.parent = numberContainer.transform;
 
                     quad.transform.localPosition = new Vector3(j, -i, 0);
 
+                    // Set the texture to the corresponding number
                     quad.renderer.material = tileSprites[pieceNumbers[i,j]-1];
                     quad.renderer.material.color = color;
                 }

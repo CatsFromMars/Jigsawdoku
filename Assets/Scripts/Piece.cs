@@ -35,6 +35,7 @@ public class Piece {
         return numbers;
     }
 
+    // Not used anymore, but may be useful for debugging
     override
     public string ToString() {
         string str = "";
