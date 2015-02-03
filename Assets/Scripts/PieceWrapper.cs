@@ -32,7 +32,6 @@ public class PieceWrapper : MonoBehaviour {
                     quad.transform.parent = numberContainer.transform;
 
                     quad.transform.localPosition = new Vector3(j, -i, 0);
-
                     // Set the texture to the corresponding number
                     quad.renderer.material = tileSprites[pieceNumbers[i,j]-1];
                     quad.renderer.material.color = color;
