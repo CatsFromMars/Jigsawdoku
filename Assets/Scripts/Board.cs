@@ -105,6 +105,8 @@ public class Board {
                 return false;
             }
         }
+
+        return true;
     }
 
     private void removePieceFromBoard(int[,] pieceNumbers, int pieceRow, int pieceCol) {
