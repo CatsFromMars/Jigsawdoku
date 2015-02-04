@@ -3,12 +3,13 @@ using System.Collections;
 
 public class BoardWrapper : MonoBehaviour {
 
-    public Color color;
+    public Color boardColor;
     public Material boardSprite;
+    public Color outlineColor;
+    public Material outlineSprite;
 
     private Board board;
 
-	// Use this for initialization
 	void Start () {
         board = new Board();
 
@@ -19,9 +20,18 @@ public class BoardWrapper : MonoBehaviour {
         quad.transform.localScale = new Vector3(10, 10, 1); // The board sprite is exactly 10 times as large as the tile sprites
 
         quad.renderer.material = boardSprite;
-        quad.renderer.material.color = color;
+        quad.renderer.material.color = boardColor;
 		quad.collider.isTrigger = true;
 		quad.layer = 2;
+
+        // The outline makes the board stand out a bit more from the background
+        GameObject outlineQuad = GameObject.CreatePrimitive(PrimitiveType.Quad);
+
+        outlineQuad.transform.parent = transform;
+        outlineQuad.transform.localPosition = new Vector3(0, 0, 1.1f);
+        outlineQuad.transform.localScale = new Vector3(10.1f, 10.1f, 1);
+        outlineQuad.renderer.material = outlineSprite;
+        outlineQuad.renderer.material.color = outlineColor;
 	}
 	
 	void Update () {
