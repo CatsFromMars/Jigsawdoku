@@ -16,6 +16,9 @@ public class PieceWrapper : MonoBehaviour {
     private GameObject numberContainer;
     private CircleCollider2D edgeCollider;
     bool move = false;
+	float rotationSpeed = 2f;
+	private Vector3 screenPoint;
+	private int currentZRot = 0;
 
     void Start() {
         piece = Piece.fromSerializable2DIntArray(serializablePieceNumbers);
@@ -83,18 +86,40 @@ public class PieceWrapper : MonoBehaviour {
     }
     
     void rotateClockwise() {
-        transform.Rotate(0, 0, 90);
-        piece.rotateClockwise();
+		transform.Rotate(0, 0, 90);
+		piece.rotateClockwise();
     }
     
     void rotateCounterClockwise() {
         transform.Rotate(0, 0, -90);
         piece.rotateCounterClockwise();
     }
-    
+
+
+	IEnumerator rotatePiece(Quaternion initialRot, Quaternion finalRot) {
+		while (transform.rotation != finalRot) {
+			transform.rotation = Quaternion.Lerp(initialRot, finalRot, Time.time*rotationSpeed);
+			//piece.rotation = Quaternion.Lerp(transform.rotation, rot, Time.time * rotationSpeed);
+			yield return 0;
+
+		}
+	}
+
+	void translatePiece() {
+
+	}
+	
+	
     void clickAndDrag() {
-                
+    
     }
+
+	void OnMouseDrag()
+	{
+		Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z);
+		Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint);
+		transform.position = curPosition;
+	}
 
     public Piece getPiece() {
         return piece;
