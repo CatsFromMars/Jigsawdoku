@@ -20,6 +20,8 @@ public class BoardWrapper : MonoBehaviour {
 
         quad.renderer.material = boardSprite;
         quad.renderer.material.color = color;
+		quad.collider.isTrigger = true;
+		quad.layer = 2;
 	}
 	
 	void Update () {
