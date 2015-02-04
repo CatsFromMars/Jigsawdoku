@@ -15,10 +15,9 @@ public class PieceWrapper : MonoBehaviour {
     private Piece piece;
     private GameObject numberContainer;
     private BoxCollider2D collider;
-    bool move = false;
-	float rotationSpeed = 2f;
 	private Vector3 screenPoint;
-	private int currentZRot = 0;
+
+    private Quaternion targetRotation;
 
     void Start() {
         piece = Piece.fromSerializable2DIntArray(serializablePieceNumbers);
@@ -58,7 +57,9 @@ public class PieceWrapper : MonoBehaviour {
 
         collider = gameObject.AddComponent<BoxCollider2D>();
         collider.size = new Vector2(pieceNumbers.GetLength(1), pieceNumbers.GetLength(0));
-        move = false;
+
+        targetRotation = Quaternion.Euler(0, 0, 0);
+        StartCoroutine(rotatePiece());
     }
     
     void Update() {
@@ -76,23 +77,21 @@ public class PieceWrapper : MonoBehaviour {
     }
     
     void rotateClockwise() {
-		transform.Rotate(0, 0, 90);
+        targetRotation *= Quaternion.Euler(0, 0, 90);
 		piece.rotateClockwise();
     }
     
     void rotateCounterClockwise() {
-        transform.Rotate(0, 0, -90);
+        targetRotation *= Quaternion.Euler(0, 0, -90);
         piece.rotateCounterClockwise();
     }
 
 
-	IEnumerator rotatePiece(Quaternion initialRot, Quaternion finalRot) {
-		while (transform.rotation != finalRot) {
-			transform.rotation = Quaternion.Lerp(initialRot, finalRot, Time.time*rotationSpeed);
-			//piece.rotation = Quaternion.Lerp(transform.rotation, rot, Time.time * rotationSpeed);
-			yield return 0;
-
-		}
+	IEnumerator rotatePiece() {
+        while (true) {
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 10);//Quaternion.Lerp(transform.rotation, targetRotation, Time.time*rotationSpeed);
+            yield return 0;
+        }
 	}
 
 	void translatePiece() {
@@ -108,7 +107,7 @@ public class PieceWrapper : MonoBehaviour {
 	{
 		Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z);
 		Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint);
-		transform.position = curPosition;
+		transform.position = new Vector3(curPosition.x, curPosition.y, 0);
 	}
 
     public Piece getPiece() {
