@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 [System.Serializable]
 public class Serializable2DIntArray
@@ -18,7 +19,10 @@ public class PieceWrapper : MonoBehaviour
 		public GameObject centerCollider;
 		public GameObject edgesCollider;
 		bool move = false;
-		
+	public int pieceSize = 9;
+	GameObject[] numbers;
+
+
 		void Start ()
 		{
 				piece = Piece.fromSerializable2DIntArray (serializablePieceNumbers);
@@ -26,9 +30,10 @@ public class PieceWrapper : MonoBehaviour
 				// Adding tiles in a wrapper object
 				numberContainer = new GameObject ("numbers");
 				numberContainer.transform.parent = transform;
-        
+		numbers = new GameObject[pieceSize];
+
 				int[,] pieceNumbers = piece.to2DArray ();
-        
+				int count = 0;
 				for (int i = 0; i < pieceNumbers.GetLength(0); i++) {
 						for (int j = 0; j < pieceNumbers.GetLength(1); j++) {
 								// Create quads for non-zero numbers
@@ -45,10 +50,15 @@ public class PieceWrapper : MonoBehaviour
 										quad.AddComponent<ForceTileUpright> ();
 										quad.collider.isTrigger = true;
 										quad.layer = 2;
+										numbers [count] = quad;
+										count ++;
 								}
 						}
 				}
+				
 
+				// instantiates the center and edges collider with same transform coordiantes as this parent piece
+				
 				GameObject temp;
 				temp = GameObject.Instantiate (centerCollider, transform.position, Quaternion.identity) as GameObject; 
 				temp.transform.position = new Vector3 (temp.transform.position.x, temp.transform.position.y, -2.0f);
@@ -73,7 +83,10 @@ public class PieceWrapper : MonoBehaviour
 										hit.collider.transform.position.y == transform.position.y) {
 										// rotate piece clockwise
 										Debug.Log ("Rotate");
-										transform.Rotate (new Vector3(0.0f, 0.0f, 90.0f));
+										transform.Rotate (new Vector3 (0.0f, 0.0f, 90.0f));
+										foreach (GameObject number in numbers) {
+												number.transform.Rotate (new Vector3 (0.0f, 0.0f, -90.0f));
+										}
 								}
 						}  
 				} 
@@ -86,16 +99,7 @@ public class PieceWrapper : MonoBehaviour
 	
 		void clickAndDrag ()
 		{
-				if (Input.GetMouseButtonDown (0)) {
-						RaycastHit hit; 
-						Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
-						if (Physics.Raycast (ray, out hit, 20.0f)) {
-								if (hit.collider.CompareTag ("Center") && hit.collider.transform.position.Equals (transform.position))
-										move = true; 
-						}                  
-				} else {
-						move = false;
-				}
+				
 		}
 
 		public Piece getPiece ()
