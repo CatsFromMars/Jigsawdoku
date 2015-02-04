@@ -2,59 +2,104 @@
 using System.Collections;
 
 [System.Serializable]
-public class Serializable2DIntArray {
-    public int[] array;
+public class Serializable2DIntArray
+{
+		public int[] array;
 }
 
-public class PieceWrapper : MonoBehaviour {
+public class PieceWrapper : MonoBehaviour
+{
 
-    public Color color;
-    public Material[] tileSprites;
-    public Serializable2DIntArray[] serializablePieceNumbers;
+		public Color color;
+		public Material[] tileSprites;
+		public Serializable2DIntArray[] serializablePieceNumbers;
+		private Piece piece;
+		private GameObject numberContainer;
+		public GameObject centerCollider;
+		public GameObject edgesCollider;
+		bool move = false;
+		
+		void Start ()
+		{
+				piece = Piece.fromSerializable2DIntArray (serializablePieceNumbers);
 
-    private Piece piece;
-    private GameObject numberContainer;
-
-    void Start() {
-        piece = Piece.fromSerializable2DIntArray(serializablePieceNumbers);
-
-        // Adding tiles in a wrapper object
-        numberContainer = new GameObject("numbers");
-        numberContainer.transform.parent = transform;
+				// Adding tiles in a wrapper object
+				numberContainer = new GameObject ("numbers");
+				numberContainer.transform.parent = transform;
         
-        int[,] pieceNumbers = piece.to2DArray();
+				int[,] pieceNumbers = piece.to2DArray ();
         
-        for (int i = 0; i < pieceNumbers.GetLength(0); i++) {
-            for (int j = 0; j < pieceNumbers.GetLength(1); j++) {
-                // Create quads for non-zero numbers
-                if (pieceNumbers[i,j] >= 1 && pieceNumbers[i,j] <= 9) {
-                    GameObject quad = GameObject.CreatePrimitive(PrimitiveType.Quad);
-                    quad.transform.parent = numberContainer.transform;
+				for (int i = 0; i < pieceNumbers.GetLength(0); i++) {
+						for (int j = 0; j < pieceNumbers.GetLength(1); j++) {
+								// Create quads for non-zero numbers
+								if (pieceNumbers [i, j] >= 1 && pieceNumbers [i, j] <= 9) {
+										GameObject quad = GameObject.CreatePrimitive (PrimitiveType.Quad);
+										quad.transform.parent = numberContainer.transform;
 
-                    quad.transform.localPosition = new Vector3(j, -i, 0);
-                    // Set the texture to the corresponding number
-                    quad.renderer.material = tileSprites[pieceNumbers[i,j]-1];
-                    quad.renderer.material.color = color;
+										quad.transform.localPosition = new Vector3 (j, -i, 0);
+										// Set the texture to the corresponding number
+										quad.renderer.material = tileSprites [pieceNumbers [i, j] - 1];
+										quad.renderer.material.color = color;
+										
 
-                    quad.AddComponent<ForceTileUpright>();
-                }
-            }
-        }
-    }
+										quad.AddComponent<ForceTileUpright> ();
+										quad.collider.isTrigger = true;
+										quad.layer = 2;
+								}
+						}
+				}
+
+				GameObject temp;
+				temp = GameObject.Instantiate (centerCollider, transform.position, Quaternion.identity) as GameObject; 
+				temp.transform.position = new Vector3 (temp.transform.position.x, temp.transform.position.y, -2.0f);
+				temp = GameObject.Instantiate (edgesCollider, transform.position, Quaternion.identity) as GameObject;
+				temp.transform.position = new Vector3 (temp.transform.position.x, temp.transform.position.y, 0.0f);
+				move = false;
+		}
     
-    void Update() {
-        
-    }
+		void Update ()
+		{
+				rotateClockwise ();
+		}
+	
+		void rotateClockwise ()
+		{
+				if (Input.GetMouseButtonDown (0)) {
+						RaycastHit hit; 
+						Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
+						if (Physics.Raycast (ray, out hit, 20.0f)) {
 
-    void rotateClockwise() {
+								if (hit.collider.CompareTag ("Edges") && hit.collider.transform.position.x == transform.position.x &&
+										hit.collider.transform.position.y == transform.position.y) {
+										// rotate piece clockwise
+										Debug.Log ("Rotate");
+										transform.Rotate (new Vector3(0.0f, 0.0f, 90.0f));
+								}
+						}  
+				} 
+		}
+	
+		void rotateCounterClockwise ()
+		{
 
-    }
+		}
+	
+		void clickAndDrag ()
+		{
+				if (Input.GetMouseButtonDown (0)) {
+						RaycastHit hit; 
+						Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
+						if (Physics.Raycast (ray, out hit, 20.0f)) {
+								if (hit.collider.CompareTag ("Center") && hit.collider.transform.position.Equals (transform.position))
+										move = true; 
+						}                  
+				} else {
+						move = false;
+				}
+		}
 
-    void rotateCounterClockwise() {
-
-    }
-
-    public Piece getPiece() {
-        return piece;
-    }
+		public Piece getPiece ()
+		{
+				return piece;
+		}
 }
