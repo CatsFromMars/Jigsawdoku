@@ -14,7 +14,7 @@ public class PieceWrapper : MonoBehaviour {
     public Serializable2DIntArray[] serializablePieceNumbers;
     private Piece piece;
     private GameObject numberContainer;
-    private CircleCollider2D edgeCollider;
+    private BoxCollider2D collider;
     bool move = false;
 
     void Start() {
@@ -53,23 +53,13 @@ public class PieceWrapper : MonoBehaviour {
 
         // Instantiates the center and edges collider at the center of the parent piece
 
-        edgeCollider = gameObject.AddComponent<CircleCollider2D>();
-        edgeCollider.radius = 1;
+        collider = gameObject.AddComponent<BoxCollider2D>();
+        collider.size = new Vector2(pieceNumbers.GetLength(1), pieceNumbers.GetLength(0));
         move = false;
     }
     
     void Update() {
         handleInput();
-    }
-
-    void OnMouseOver() {
-        Debug.Log("hello");
-        if (Input.GetMouseButtonDown(0)) { // Left Click
-            rotateClockwise();
-        }
-        if (Input.GetMouseButtonDown(1)) { // Right Click
-            rotateCounterClockwise();
-        }
     }
 
     void handleInput() {
