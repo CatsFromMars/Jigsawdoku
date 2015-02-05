@@ -1,10 +1,16 @@
 # =============== #
 # Unity generated #
 # =============== #
-[Tt]emp/
-[Oo]bj/
-[Bb]uild
-[Ll]ibrary/
+Temp/
+temp/
+Obj/
+obj/
+Build
+build
+Library/
+library/
+ProjectSettings/
+projectSettings/
 sysinfo.txt
  
 # ===================================== #
