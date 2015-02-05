@@ -7,6 +7,7 @@ public class BoardWrapper : MonoBehaviour {
     public Material boardSprite;
     public Color outlineColor;
     public Material outlineSprite;
+	public Piece selectedPiece;
 
     private Board board;
 
@@ -35,6 +36,11 @@ public class BoardWrapper : MonoBehaviour {
 	}
 	
 	void Update () {
+		if(selectedPiece != null) PieceSnapTo();
 	
+	}
+
+	void PieceSnapTo() {
+		board.attemptAddPiece(selectedPiece, 3, 3);
 	}
 }

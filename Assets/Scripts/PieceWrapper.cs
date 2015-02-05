@@ -19,6 +19,13 @@ public class PieceWrapper : MonoBehaviour {
 	float rotationSpeed = 2f;
 	private Vector3 screenPoint;
 	private int currentZRot = 0;
+	public GameObject board;
+	public BoardWrapper wrapper;
+
+	void Awake() {
+		board = GameObject.FindGameObjectWithTag("Board");
+		wrapper = board.GetComponent<BoardWrapper>();
+	}
 
     void Start() {
         piece = Piece.fromSerializable2DIntArray(serializablePieceNumbers);
@@ -106,6 +113,7 @@ public class PieceWrapper : MonoBehaviour {
 
 	void OnMouseDrag()
 	{
+		wrapper.selectedPiece = this.piece;
 		Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z);
 		Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint);
 		transform.position = curPosition;
