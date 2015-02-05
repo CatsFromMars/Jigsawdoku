@@ -12,23 +12,19 @@ public class PieceWrapper : MonoBehaviour {
     public Color color;
     public Material[] tileSprites;
     public Serializable2DIntArray[] serializablePieceNumbers;
+    public GameObject board;
+    public BoardWrapper wrapper;
+
     private Piece piece;
     private GameObject numberContainer;
     private BoxCollider2D collider;
-	private Vector3 screenPoint;
-<<<<<<< HEAD
-	private int currentZRot = 0;
-	public GameObject board;
-	public BoardWrapper wrapper;
+    private Vector3 screenPoint;
+    private Quaternion targetRotation;
 
 	void Awake() {
 		board = GameObject.FindGameObjectWithTag("Board");
 		wrapper = board.GetComponent<BoardWrapper>();
 	}
-=======
-
-    private Quaternion targetRotation;
->>>>>>> dbe86271c45d1f9693b56432ebe88adbcf7dd152
 
     void Start() {
         piece = Piece.fromSerializable2DIntArray(serializablePieceNumbers);
@@ -40,10 +36,10 @@ public class PieceWrapper : MonoBehaviour {
         int[,] pieceNumbers = piece.to2DArray();
         int count = 0;
 
-        Vector3 centerOffset = new Vector3(pieceNumbers.GetLength(0)/4.0f, -pieceNumbers.GetLength(1)/2.0f, 0);
+        Vector3 centerOffset = new Vector3((pieceNumbers.GetLength(1)-1)/2.0f, -(pieceNumbers.GetLength(0)-1)/2.0f, 0);
 
-        for (int i = 0; i < pieceNumbers.GetLength(0); i++) {
-            for (int j = 0; j < pieceNumbers.GetLength(1); j++) {
+        for (int i = 0; i < piece.getHeight(); i++) {
+            for (int j = 0; j < piece.getWidth(); j++) {
                 // Create quads for non-zero numbers
                 if (pieceNumbers[i, j] >= 1 && pieceNumbers[i, j] <= 9) {
                     GameObject quad = GameObject.CreatePrimitive(PrimitiveType.Quad);
@@ -67,7 +63,7 @@ public class PieceWrapper : MonoBehaviour {
         // Instantiates the center and edges collider at the center of the parent piece
 
         collider = gameObject.AddComponent<BoxCollider2D>();
-        collider.size = new Vector2(pieceNumbers.GetLength(1), pieceNumbers.GetLength(0));
+        collider.size = new Vector2(piece.getWidth(), piece.getHeight());
 
         targetRotation = Quaternion.Euler(0, 0, 0);
         StartCoroutine(rotatePiece());
@@ -75,15 +71,49 @@ public class PieceWrapper : MonoBehaviour {
     
     void Update() {
         handleInput();
+
+        if (!Input.GetMouseButton(0)) {
+            snapPieces();
+        }
     }
 
     void handleInput() {
-        // Placeholder controls
+        // Placeholder controls for 
         if (Input.GetKeyDown(KeyCode.Z)) {
             rotateClockwise();
         }
         if (Input.GetKeyDown(KeyCode.X)) {
             rotateCounterClockwise();
+        }
+    }
+
+    void snapPieces() {
+        float adjustX = (piece.getWidth() - 1) / 2.0f;
+        float adjustY = (piece.getHeight() - 1) / 2.0f;
+
+        float minX = -4.5f + adjustX;
+        float maxX = 4.5f - adjustX;
+
+        float minY = -4.5f + adjustY;
+        float maxY = 4.5f - adjustY;
+
+        if (transform.position.x > minX && transform.position.x < maxX && transform.position.y > minY && transform.position.y < maxY) {
+            float x = transform.position.x;
+            float y = transform.position.y;
+            float z = transform.position.z;
+
+            if (piece.getWidth() % 2 == 1) {
+                x = Mathf.Round(transform.position.x);
+            } else {
+                x = Mathf.Round(transform.position.x - 0.5f) + 0.5f;
+            }
+
+            if (piece.getHeight() % 2 == 1) {
+                y = Mathf.Round(transform.position.y);
+            } else {
+                y = Mathf.Round(transform.position.y - 0.5f) + 0.5f;
+            }
+            transform.position = new Vector3(x, y, z);
         }
     }
     
@@ -100,19 +130,10 @@ public class PieceWrapper : MonoBehaviour {
 
 	IEnumerator rotatePiece() {
         while (true) {
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 10);//Quaternion.Lerp(transform.rotation, targetRotation, Time.time*rotationSpeed);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 10);
             yield return 0;
         }
 	}
-
-	void translatePiece() {
-
-	}
-	
-	
-    void clickAndDrag() {
-    
-    }
 
 	void OnMouseDrag()
 	{
