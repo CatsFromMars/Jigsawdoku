@@ -16,7 +16,6 @@ public class PieceWrapper : MonoBehaviour {
     private GameObject numberContainer;
     private BoxCollider2D collider;
 	private Vector3 screenPoint;
-<<<<<<< HEAD
 	private int currentZRot = 0;
 	public GameObject board;
 	public BoardWrapper wrapper;
@@ -25,10 +24,8 @@ public class PieceWrapper : MonoBehaviour {
 		board = GameObject.FindGameObjectWithTag("Board");
 		wrapper = board.GetComponent<BoardWrapper>();
 	}
-=======
 
     private Quaternion targetRotation;
->>>>>>> dbe86271c45d1f9693b56432ebe88adbcf7dd152
 
     void Start() {
         piece = Piece.fromSerializable2DIntArray(serializablePieceNumbers);
