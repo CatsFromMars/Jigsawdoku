@@ -43,4 +43,8 @@ public class BoardWrapper : MonoBehaviour {
 	void PieceSnapTo() {
 		board.attemptAddPiece(selectedPiece, 3, 3);
 	}
+
+	public Board getBoard() {
+		return board;
+	}
 }
