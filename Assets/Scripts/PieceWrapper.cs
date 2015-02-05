@@ -17,7 +17,7 @@ public class PieceWrapper : MonoBehaviour {
 
     private Piece piece;
     private GameObject numberContainer;
-    private BoxCollider2D collider;
+    private MeshCollider collider;
     private Vector3 screenPoint;
     private Quaternion targetRotation;
 
@@ -34,7 +34,6 @@ public class PieceWrapper : MonoBehaviour {
         numberContainer.transform.parent = transform;
 
         int[,] pieceNumbers = piece.to2DArray();
-        int count = 0;
 
         Vector3 centerOffset = new Vector3((pieceNumbers.GetLength(1)-1)/2.0f, -(pieceNumbers.GetLength(0)-1)/2.0f, 0);
 
@@ -49,21 +48,25 @@ public class PieceWrapper : MonoBehaviour {
                     // Set the texture to the corresponding number
                     quad.renderer.material = tileSprites[pieceNumbers[i, j] - 1];
                     quad.renderer.material.color = color;
-                                        
 
+                    Destroy(quad.GetComponent<MeshCollider>());
                     quad.AddComponent<ForceTileUpright>();
-                    quad.collider.isTrigger = true;
-                    quad.layer = 2;
-                    count ++;
                 }
             }
         }
-                
 
-        // Instantiates the center and edges collider at the center of the parent piece
+        MeshFilter[] meshFilters = GetComponentsInChildren<MeshFilter>();
+        CombineInstance[] combine = new CombineInstance[meshFilters.Length];
+        for (int i = 0; i < meshFilters.Length; i++) {
+            combine[i].mesh = meshFilters[i].sharedMesh;
+            combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
+        }
 
-        collider = gameObject.AddComponent<BoxCollider2D>();
-        collider.size = new Vector2(piece.getWidth(), piece.getHeight());
+        MeshFilter meshFilter = gameObject.AddComponent<MeshFilter>();
+        meshFilter.mesh.CombineMeshes(combine);
+        
+        collider = gameObject.AddComponent<MeshCollider>();
+        collider.sharedMesh = meshFilter.mesh;
 
         targetRotation = Quaternion.Euler(0, 0, 0);
         StartCoroutine(rotatePiece());
