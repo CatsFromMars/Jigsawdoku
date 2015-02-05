@@ -9,8 +9,8 @@ public class Piece {
 
     private Piece(int[,] nums) {
         this.numbers = nums;
-        this.width = nums.GetLength(0);
-        this.height = nums.GetLength(1);
+        this.width = nums.GetLength(1);
+        this.height = nums.GetLength(0);
     }
 
     public void rotateClockwise() {
@@ -33,6 +33,14 @@ public class Piece {
 
     public int[,] to2DArray() {
         return numbers;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 
     // Not used anymore, but may be useful for debugging
