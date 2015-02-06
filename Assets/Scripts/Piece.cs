@@ -14,23 +14,33 @@ public class Piece {
     }
 
     public void rotateClockwise() {
-        int[,] newNumbers = new int[height,width];
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                newNumbers[j,i] = numbers[width-i-1, j];
+        int[,] newNumbers = new int[width, height];
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                Debug.Log("clockwise " + width + " " + height + " " + (height - i - 1));
+                newNumbers[j,i] = numbers[height-i-1, j];
             }
         }
         numbers = newNumbers;
+
+        int swap = width;
+        width = height;
+        height = swap;
     }
 
     public void rotateCounterClockwise() {
-        int[,] newNumbers = new int[height,width];
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                newNumbers[j,i] = numbers[i, height-j-1];
+        int[,] newNumbers = new int[width, height];
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                Debug.Log("counter clockwise " + width + " " + height + " " + (width - j - 1));
+                newNumbers[j,i] = numbers[i, width-j-1];
             }
         }
         numbers = newNumbers;
+        
+        int swap = width;
+        width = height;
+        height = swap;
     }
 
     public int[,] to2DArray() {
