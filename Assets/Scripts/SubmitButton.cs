@@ -2,19 +2,12 @@
 using System.Collections;
 
 public class SubmitButton : MonoBehaviour {
-	public bool boardSolved = false; //Boolean determining whether or not the player has solved the board.
-
     private BoardWrapper boardWrapper;
 
 	// Use this for initialization
 	void Start () {
         GameObject boardContainer = GameObject.FindGameObjectWithTag("Board");
         boardWrapper = boardContainer.GetComponent<BoardWrapper>();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
 	}
 
 	void OnMouseDown() {
@@ -34,6 +27,7 @@ public class SubmitButton : MonoBehaviour {
 		Instantiate(Resources.Load ("CelebrationStars"), transform.position, Quaternion.identity);
 		//play "you win!" sting
 		//display "you win! text"
+		//bigText.text = "Bingo Tiger!";
 	}
 
 	void GameOver() {
@@ -41,6 +35,8 @@ public class SubmitButton : MonoBehaviour {
 		//play "Oh no! Sound effect"
 		//also maybe darken the screen a bit?
 		//Camera shake?
+		//Display Text
+		//bigText.text = "Not quite right...";
 	}
 
 	void dropPieces() {
