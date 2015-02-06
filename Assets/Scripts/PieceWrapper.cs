@@ -9,8 +9,10 @@ public class Serializable2DIntArray {
 
 public class PieceWrapper : MonoBehaviour {
 
-    public Color color;
-    public Material[] tileSprites;
+    public Color numberColor;
+    public Color backColor;
+    public Material[] numberSprites;
+    public Material backSprite;
     public Serializable2DIntArray[] serializablePieceNumbers;
     public GameObject board;
     public BoardWrapper boardWrapper;
@@ -45,15 +47,23 @@ public class PieceWrapper : MonoBehaviour {
                 // Create quads for non-zero numbers
                 if (pieceNumbers[i, j] >= 1 && pieceNumbers[i, j] <= 9) {
                     GameObject quad = GameObject.CreatePrimitive(PrimitiveType.Quad);
+                    GameObject backQuad = GameObject.CreatePrimitive(PrimitiveType.Quad);
                     quad.transform.parent = numberContainer.transform;
+                    backQuad.transform.parent = numberContainer.transform;
 
                     quad.transform.localPosition = new Vector3(j, -i, 0) - centerOffset;
+                    backQuad.transform.localPosition = new Vector3(j, -i, 0) - centerOffset;
                     // Set the texture to the corresponding number
-                    quad.renderer.material = tileSprites[pieceNumbers[i, j] - 1];
-                    quad.renderer.material.color = color;
+                    quad.renderer.material = numberSprites[pieceNumbers[i, j] - 1];
+                    quad.renderer.material.color = numberColor;
+
+                    backQuad.renderer.material = backSprite;
+                    backQuad.renderer.material.color = backColor;
 
                     Destroy(quad.GetComponent<MeshCollider>());
+                    Destroy(backQuad.GetComponent<MeshCollider>());
                     quad.AddComponent<ForceTileUpright>();
+                    backQuad.AddComponent<ForceTileUpright>();
                 }
             }
         }

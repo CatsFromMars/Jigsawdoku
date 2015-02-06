@@ -5,8 +5,8 @@ public class BoardWrapper : MonoBehaviour {
 
     public Color boardColor;
     public Material boardSprite;
-    public Color outlineColor;
-    public Material outlineSprite;
+    //public Color outlineColor;
+    //public Material outlineSprite;
 	public Piece selectedPiece;
 
     private Board board;
@@ -26,6 +26,7 @@ public class BoardWrapper : MonoBehaviour {
 		quad.layer = 2;
 
         // The outline makes the board stand out a bit more from the background
+        /*
         GameObject outlineQuad = GameObject.CreatePrimitive(PrimitiveType.Quad);
 
         outlineQuad.transform.parent = transform;
@@ -33,6 +34,7 @@ public class BoardWrapper : MonoBehaviour {
         outlineQuad.transform.localScale = new Vector3(10.1f, 10.1f, 1);
         outlineQuad.renderer.material = outlineSprite;
         outlineQuad.renderer.material.color = outlineColor;
+        */
 
         GameObject[] pieces = GameObject.FindGameObjectsWithTag("Piece");
         board.setPieces(pieces);

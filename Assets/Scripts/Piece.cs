@@ -17,7 +17,6 @@ public class Piece {
         int[,] newNumbers = new int[width, height];
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                Debug.Log("clockwise " + width + " " + height + " " + (height - i - 1));
                 newNumbers[j,i] = numbers[height-i-1, j];
             }
         }
@@ -32,7 +31,6 @@ public class Piece {
         int[,] newNumbers = new int[width, height];
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                Debug.Log("counter clockwise " + width + " " + height + " " + (width - j - 1));
                 newNumbers[j,i] = numbers[i, width-j-1];
             }
         }
