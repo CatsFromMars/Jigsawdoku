@@ -33,14 +33,12 @@ public class BoardWrapper : MonoBehaviour {
         outlineQuad.transform.localScale = new Vector3(10.1f, 10.1f, 1);
         outlineQuad.renderer.material = outlineSprite;
         outlineQuad.renderer.material.color = outlineColor;
-	}
-	
-	void Update () {
-		if(selectedPiece != null) PieceSnapTo();
-	
+
+        GameObject[] pieces = GameObject.FindGameObjectsWithTag("Piece");
+        board.setPieces(pieces);
 	}
 
-	void PieceSnapTo() {
-		board.attemptAddPiece(selectedPiece, 3, 3);
-	}
+    public Board getBoard() {
+        return board;
+    }
 }

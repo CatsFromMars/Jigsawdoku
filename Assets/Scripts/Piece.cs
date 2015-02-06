@@ -20,6 +20,7 @@ public class Piece {
                 newNumbers[j,i] = numbers[width-i-1, j];
             }
         }
+        numbers = newNumbers;
     }
 
     public void rotateCounterClockwise() {
@@ -29,6 +30,7 @@ public class Piece {
                 newNumbers[j,i] = numbers[i, height-j-1];
             }
         }
+        numbers = newNumbers;
     }
 
     public int[,] to2DArray() {

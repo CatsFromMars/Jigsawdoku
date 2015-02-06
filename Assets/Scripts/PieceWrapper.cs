@@ -13,17 +13,19 @@ public class PieceWrapper : MonoBehaviour {
     public Material[] tileSprites;
     public Serializable2DIntArray[] serializablePieceNumbers;
     public GameObject board;
-    public BoardWrapper wrapper;
+    public BoardWrapper boardWrapper;
 
     private Piece piece;
     private GameObject numberContainer;
     private MeshCollider collider;
-    private Vector3 screenPoint;
     private Quaternion targetRotation;
+
+    private int pieceRow;
+    private int pieceCol;
 
 	void Awake() {
 		board = GameObject.FindGameObjectWithTag("Board");
-		wrapper = board.GetComponent<BoardWrapper>();
+		boardWrapper = board.GetComponent<BoardWrapper>();
 	}
 
     void Start() {
@@ -32,6 +34,7 @@ public class PieceWrapper : MonoBehaviour {
         // Adding tiles in a wrapper object
         numberContainer = new GameObject("numbers");
         numberContainer.transform.parent = transform;
+        numberContainer.transform.localPosition = new Vector3(0, 0, 0);
 
         int[,] pieceNumbers = piece.to2DArray();
 
@@ -55,6 +58,12 @@ public class PieceWrapper : MonoBehaviour {
             }
         }
 
+        Vector3 savePosition = transform.position;
+        Quaternion saveRotation = transform.rotation;
+        
+        transform.position = new Vector3(0, 0, 0);
+        transform.rotation = Quaternion.Euler(0, 0, 0);
+
         MeshFilter[] meshFilters = GetComponentsInChildren<MeshFilter>();
         CombineInstance[] combine = new CombineInstance[meshFilters.Length];
         for (int i = 0; i < meshFilters.Length; i++) {
@@ -68,20 +77,28 @@ public class PieceWrapper : MonoBehaviour {
         collider = gameObject.AddComponent<MeshCollider>();
         collider.sharedMesh = meshFilter.mesh;
 
+        transform.position = savePosition;
+        transform.rotation = saveRotation;
+
         targetRotation = Quaternion.Euler(0, 0, 0);
         StartCoroutine(rotatePiece());
     }
     
-    void Update() {
-        handleInput();
+    void OnMouseDrag() {
+        boardWrapper.selectedPiece = this.piece;
+        Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0);
+        Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint);
+        transform.position = new Vector3(curPosition.x, curPosition.y, 0);
 
-        if (!Input.GetMouseButton(0)) {
-            snapPieces();
-        }
+        handleInput();
+    }
+
+    void OnMouseUp() {
+        snapPieces();
     }
 
     void handleInput() {
-        // Placeholder controls for 
+        // Placeholder controls
         if (Input.GetKeyDown(KeyCode.Z)) {
             rotateClockwise();
         }
@@ -116,34 +133,28 @@ public class PieceWrapper : MonoBehaviour {
             } else {
                 y = Mathf.Round(transform.position.y - 0.5f) + 0.5f;
             }
-            transform.position = new Vector3(x, y, z);
+            
+            Vector3 newPosition = new Vector3(x, y, z);
+
+            transform.position = newPosition;
         }
     }
     
     void rotateClockwise() {
-        targetRotation *= Quaternion.Euler(0, 0, 90);
+        targetRotation *= Quaternion.Euler(0, 0, -90);
 		piece.rotateClockwise();
     }
     
     void rotateCounterClockwise() {
-        targetRotation *= Quaternion.Euler(0, 0, -90);
+        targetRotation *= Quaternion.Euler(0, 0, 90);
         piece.rotateCounterClockwise();
     }
-
 
 	IEnumerator rotatePiece() {
         while (true) {
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 10);
             yield return 0;
         }
-	}
-
-	void OnMouseDrag()
-	{
-		wrapper.selectedPiece = this.piece;
-		Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, screenPoint.z);
-		Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint);
-		transform.position = new Vector3(curPosition.x, curPosition.y, 0);
 	}
 
     public Piece getPiece() {

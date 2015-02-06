@@ -4,9 +4,12 @@ using System.Collections;
 public class SubmitButton : MonoBehaviour {
 	public bool boardSolved = false; //Boolean determining whether or not the player has solved the board.
 
+    private BoardWrapper boardWrapper;
+
 	// Use this for initialization
 	void Start () {
-	
+        GameObject boardContainer = GameObject.FindGameObjectWithTag("Board");
+        boardWrapper = boardContainer.GetComponent<BoardWrapper>();
 	}
 	
 	// Update is called once per frame
@@ -16,8 +19,15 @@ public class SubmitButton : MonoBehaviour {
 
 	void OnMouseDown() {
 		//When one clicks on the button...
-		if(!boardSolved) GameOver();
-		else WinnerIsYou();
+        Board board = boardWrapper.getBoard();
+
+		if (!board.isComplete()) {
+            Debug.Log("Board isn't solved yet!");
+            GameOver();
+        } else {
+            Debug.Log("You win!");
+            WinnerIsYou();
+        }
 	}
 
 	void WinnerIsYou() {
@@ -34,10 +44,13 @@ public class SubmitButton : MonoBehaviour {
 	}
 
 	void dropPieces() {
+        /*
 		GameObject[] pieces = GameObject.FindGameObjectsWithTag("Piece");
 		foreach(GameObject piece in pieces) {
-			piece.AddComponent("RigidBody2D");
-			piece.rigidbody2D.velocity = new Vector2 (0, Random.Range(-5F, -10F));
+
+			// Rigidbody rigidbody = piece.AddComponent<Rigidbody>();
+			// rigidbody.velocity = new Vector2 (0, Random.Range(-5F, -10F));
 		}
+        */
 	}
 }
