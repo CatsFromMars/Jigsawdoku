@@ -23,7 +23,8 @@ public class PieceWrapper : MonoBehaviour {
     private MeshCollider collider;
     private Quaternion targetRotation;
 
-    private Vector3 localMousePosition;
+    private Vector2 localMouseXY;
+    private int rotateDelay;
 
 	void Awake() {
 		board = GameObject.FindGameObjectWithTag("Board");
@@ -115,17 +116,35 @@ public class PieceWrapper : MonoBehaviour {
         
         transform.position = new Vector3(newX, newY, 0);
     }
+
+    void Update() {
+        if (rotateDelay > 0) {
+            rotateDelay--;
+        }
+    }
     
     void OnMouseDrag() {
         boardWrapper.selectedPiece = this.piece;
-        
+
         Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0);
         Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint);
-
-        float newX = Mathf.Clamp(curPosition.x - localMousePosition.x, -13, 13);
-        float newY = Mathf.Clamp(curPosition.y - localMousePosition.y, -10, 5);
+        
+        float newX = Mathf.Clamp(curPosition.x - localMouseXY.x, -13, 13);
+        float newY = Mathf.Clamp(curPosition.y - localMouseXY.y, -10, 5);
         
         transform.position = new Vector3(newX, newY, -1);
+
+        float mouseWheel = Input.GetAxisRaw("Mouse ScrollWheel");
+
+        if (mouseWheel > 0 && rotateDelay == 0) {
+            rotateCounterClockwise();
+            rotateDelay = 20;
+        } else if (mouseWheel < 0 && rotateDelay == 0) {
+            rotateClockwise();
+            rotateDelay = 20;
+        }
+
+
         handleInput();
 
         GameObject background = GameObject.FindGameObjectWithTag("BackgroundEffect");
@@ -153,7 +172,7 @@ public class PieceWrapper : MonoBehaviour {
         Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint);
 
         if (!Input.GetMouseButton(0)) {
-            localMousePosition = curPosition - transform.position;
+            localMouseXY = new Vector2(curPosition.x - transform.position.x, curPosition.y - transform.position.y);
         }
     }
 
