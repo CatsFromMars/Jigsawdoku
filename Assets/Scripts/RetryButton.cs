@@ -1,37 +1,39 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class RetryButton : MonoBehaviour {
+public class RetryButton : _PressableButton {
 
-    public Material[] sprites;
-    private GameObject quad;
+    public Material normalSprite;
+    public Material hoverSprite;
+    public Material pressedSprite;
 
-    void Start() {
-        quad = GameObject.CreatePrimitive(PrimitiveType.Quad);
-        quad.transform.parent = transform;
-        quad.transform.localPosition = new Vector3(0, 0, 0);
-        quad.transform.localScale = new Vector3(2142.0f/500, 1145.0f/500, 1);
-
-        quad.renderer.material = sprites[0];
-
-        BoxCollider2D collider = gameObject.AddComponent<BoxCollider2D>();
-        collider.size = new Vector2(2142.0f/550, 1145.0f/550);
+    override
+    public Material getNormalSprite() {
+        return normalSprite;
     }
 
-    void OnMouseUpAsButton() {
-        Application.LoadLevel(Application.loadedLevel);
+    override
+    public Material getHoverSprite() {
+        return hoverSprite;
+    }
+
+    override
+    public Material getPressedSprite() {
+        return pressedSprite;
     }
     
-    void OnMouseDown() {
-        quad.renderer.material = sprites[2];
+    override
+    public Vector2 getDimensions() {
+        return new Vector2(2142, 1145);
     }
-
-    void OnMouseEnter() {
-        quad.renderer.material = sprites[1];
+    
+    override
+    public float getScaleFactor() {
+        return 500;
     }
-
-    void OnMouseExit() {
-        quad.renderer.material = sprites[0];
+    
+    override
+    public void onButtonPressed() {
+        Application.LoadLevel(Application.loadedLevel);
     }
-
 }

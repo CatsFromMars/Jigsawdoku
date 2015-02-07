@@ -1,28 +1,80 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SubmitButton : MonoBehaviour {
-    private BoardWrapper boardWrapper;
+public class SubmitButton : _PressableButton {
+    public Material normalSprite;
+    public Material hoverSprite;
+    public Material pressedSprite;
+    
+    override
+    public Material getNormalSprite() {
+        return normalSprite;
+    }
+    
+    override
+    public Material getHoverSprite() {
+        return hoverSprite;
+    }
+    
+    override
+    public Material getPressedSprite() {
+        return pressedSprite;
+    }
+    
+    override
+    public Vector2 getDimensions() {
+        return new Vector2(2142, 1145);
+    }
+    
+    override
+    public float getScaleFactor() {
+        return 500;
+    }
+    
+    override
+    public void onButtonPressed() {
+        BoardWrapper boardWrapper = GameObject.FindGameObjectWithTag("Board").GetComponent<BoardWrapper>();
+        Board board = boardWrapper.getBoard();
+        
+        if (!board.isComplete()) {
+            GameOver();
+        } else {
+            WinnerIsYou();
+        }
+    }
 
-	// Use this for initialization
+    /*
+    private GameObject quad;
+
 	void Start () {
         GameObject boardContainer = GameObject.FindGameObjectWithTag("Board");
         boardWrapper = boardContainer.GetComponent<BoardWrapper>();
+
+        quad = GameObject.CreatePrimitive(PrimitiveType.Quad);
+        quad.transform.parent = transform;
+        quad.transform.localPosition = new Vector3(0, 0, 0);
+        quad.transform.localScale = new Vector3(2142.0f/500, 1145.0f/500, 1);
+        
+        quad.renderer.material = sprites[0];
+        
+        BoxCollider2D collider = gameObject.AddComponent<BoxCollider2D>();
+        collider.size = new Vector2(2142.0f/550, 1145.0f/550);
 	}
 
-	void OnMouseDown() {
-		//When one clicks on the button...
-        Board board = boardWrapper.getBoard();
+    void OnMouseDown() {
+        quad.renderer.material = sprites[2];
+	}
 
-		if (!board.isComplete()) {
-            Debug.Log("Board isn't solved yet!");
+    void OnMouseUpAsButton() {
+        Board board = boardWrapper.getBoard();
+        
+        if (!board.isComplete()) {
             GameOver();
         } else {
-            Debug.Log("You win!");
             WinnerIsYou();
         }
-	}
-
+    }
+    */
 	void WinnerIsYou() {
 		Instantiate(Resources.Load ("CelebrationStars"), transform.position, Quaternion.identity);
 		//play "you win!" sting
