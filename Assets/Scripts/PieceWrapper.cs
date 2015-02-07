@@ -45,12 +45,12 @@ public class PieceWrapper : MonoBehaviour {
 
         for (int i = 0; i < piece.getHeight(); i++) {
             for (int j = 0; j < piece.getWidth(); j++) {
-                // Create quads for non-zero numbers
+                // Create quads for valid numbers
                 if (pieceNumbers[i, j] >= 1 && pieceNumbers[i, j] <= 9) {
 
                     GameObject numberTile = new GameObject(pieceNumbers[i, j] + "");
                     numberTile.transform.parent = numberContainer.transform;
-                    numberTile.transform.localPosition = Vector3.zero;
+                    numberTile.transform.localPosition = new Vector3(j, -i, 0) - centerOffset;
 
                     GameObject quad = GameObject.CreatePrimitive(PrimitiveType.Quad);
                     GameObject backQuad = GameObject.CreatePrimitive(PrimitiveType.Quad);
@@ -59,11 +59,10 @@ public class PieceWrapper : MonoBehaviour {
                     backQuad.transform.parent = numberTile.transform;
                     outlineQuad.transform.parent = numberTile.transform;
 
-                    quad.transform.localPosition = new Vector3(j, -i, 0) - centerOffset;
-                    backQuad.transform.localPosition = new Vector3(j, -i, 0) - centerOffset;
-                    outlineQuad.transform.localPosition = new Vector3(j, -i, 0.1f) - centerOffset;
+                    quad.transform.localPosition = Vector3.zero;
+                    backQuad.transform.localPosition = Vector3.zero;
+                    outlineQuad.transform.localPosition = new Vector3(0, 0, 0.1f);
                     outlineQuad.transform.localScale = new Vector3(1.05f, 1.05f, 1);
-
 
                     // Set the texture to the corresponding number
                     quad.renderer.material = numberSprites[pieceNumbers[i, j] - 1];
@@ -78,11 +77,6 @@ public class PieceWrapper : MonoBehaviour {
                     Destroy(quad.GetComponent<MeshCollider>());
                     Destroy(backQuad.GetComponent<MeshCollider>());
                     Destroy(outlineQuad.GetComponent<MeshCollider>());
-                    /*
-                    quad.AddComponent<ForceTileUpright>();
-                    backQuad.AddComponent<ForceTileUpright>();
-                    outlineQuad.AddComponent<ForceTileUpright>();
-                    */
 
                     numberTile.AddComponent<ForceTileUpright>();
                 }
