@@ -75,11 +75,41 @@ public class ColorUtils {
         } else if (2 * tr < 1) {
             r = t1;
         } else if (3 * tr < 2) {
-
+            r = t2 + (t1-t2)*(0.66666f - tr)*6;
         } else {
             r = t2;
         }
 
-        return new Vector3();
+        if (6 * tg < 1) {
+            g = t2 + (t1-t2)*6*tg;
+        } else if (2 * tg < 1) {
+            g = t1;
+        } else if (3 * tg < 2) {
+            g = t2 + (t1-t2)*(0.66666f - tg)*6;
+        } else {
+            g = t2;
+        }
+
+        if (6 * tb < 1) {
+            b = t2 + (t1-t2)*6*tb;
+        } else if (2 * tb < 1) {
+            b = t1;
+        } else if (3 * tb < 2) {
+            b = t2 + (t1-t2)*(0.66666f - tb)*6;
+        } else {
+            b = t2;
+        }
+
+        return new Vector3(r, g, b);
+    }
+
+    public static Color lightenColor(Color c, float amount) {
+        Vector3 hsl = RGB2HSL(c);
+
+        Vector3 newHsl = new Vector3(hsl[0], hsl[1], Mathf.Clamp01(hsl[2] + amount));
+
+        Vector3 newRgb = HSL2RGB(newHsl);
+
+        return new Color(newRgb.x, newRgb.y, newRgb.z, 1);
     }
 }

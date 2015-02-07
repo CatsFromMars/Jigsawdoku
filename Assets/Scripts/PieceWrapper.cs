@@ -13,6 +13,7 @@ public class PieceWrapper : MonoBehaviour {
     public Color backColor;
     public Material[] numberSprites;
     public Material backSprite;
+    public Material silhouette;
     public Serializable2DIntArray[] serializablePieceNumbers;
     public GameObject board;
     public BoardWrapper boardWrapper;
@@ -46,13 +47,24 @@ public class PieceWrapper : MonoBehaviour {
             for (int j = 0; j < piece.getWidth(); j++) {
                 // Create quads for non-zero numbers
                 if (pieceNumbers[i, j] >= 1 && pieceNumbers[i, j] <= 9) {
+
+                    GameObject numberTile = new GameObject(pieceNumbers[i, j] + "");
+                    numberTile.transform.parent = numberContainer.transform;
+                    numberTile.transform.localPosition = Vector3.zero;
+
                     GameObject quad = GameObject.CreatePrimitive(PrimitiveType.Quad);
                     GameObject backQuad = GameObject.CreatePrimitive(PrimitiveType.Quad);
-                    quad.transform.parent = numberContainer.transform;
-                    backQuad.transform.parent = numberContainer.transform;
+                    GameObject outlineQuad = GameObject.CreatePrimitive(PrimitiveType.Quad);
+                    quad.transform.parent = numberTile.transform;
+                    backQuad.transform.parent = numberTile.transform;
+                    outlineQuad.transform.parent = numberTile.transform;
 
                     quad.transform.localPosition = new Vector3(j, -i, 0) - centerOffset;
                     backQuad.transform.localPosition = new Vector3(j, -i, 0) - centerOffset;
+                    outlineQuad.transform.localPosition = new Vector3(j, -i, 0.1f) - centerOffset;
+                    outlineQuad.transform.localScale = new Vector3(1.05f, 1.05f, 1);
+
+
                     // Set the texture to the corresponding number
                     quad.renderer.material = numberSprites[pieceNumbers[i, j] - 1];
                     quad.renderer.material.color = numberColor;
@@ -60,10 +72,19 @@ public class PieceWrapper : MonoBehaviour {
                     backQuad.renderer.material = backSprite;
                     backQuad.renderer.material.color = backColor;
 
+                    outlineQuad.renderer.material = silhouette;
+                    outlineQuad.renderer.material.color = numberColor;
+
                     Destroy(quad.GetComponent<MeshCollider>());
                     Destroy(backQuad.GetComponent<MeshCollider>());
+                    Destroy(outlineQuad.GetComponent<MeshCollider>());
+                    /*
                     quad.AddComponent<ForceTileUpright>();
                     backQuad.AddComponent<ForceTileUpright>();
+                    outlineQuad.AddComponent<ForceTileUpright>();
+                    */
+
+                    numberTile.AddComponent<ForceTileUpright>();
                 }
             }
         }
@@ -92,19 +113,50 @@ public class PieceWrapper : MonoBehaviour {
 
         targetRotation = Quaternion.Euler(0, 0, 0);
         StartCoroutine(rotatePiece());
+
+        float x = transform.position.x;
+        float y = transform.position.y;
+        
+        float newX = Mathf.Clamp(x, -13, 13);
+        float newY = Mathf.Clamp(y, -10, 5);
+        
+        transform.position = new Vector3(newX, newY, 0);
     }
     
     void OnMouseDrag() {
         boardWrapper.selectedPiece = this.piece;
         Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0);
         Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint);
-        transform.position = new Vector3(curPosition.x, curPosition.y, 0);
 
+        float newX = Mathf.Clamp(curPosition.x, -13, 13);
+        float newY = Mathf.Clamp(curPosition.y, -10, 5);
+        
+        transform.position = new Vector3(newX, newY, -1);
         handleInput();
+
+        GameObject background = GameObject.FindGameObjectWithTag("BackgroundEffect");
+        BackgroundController backgroundController = background.GetComponent<BackgroundController>();
+
+        backgroundController.setColor(ColorUtils.lightenColor(backColor, 0.2f));
     }
 
     void OnMouseUp() {
         snapPieces();
+        
+        GameObject background = GameObject.FindGameObjectWithTag("BackgroundEffect");
+        BackgroundController backgroundController = background.GetComponent<BackgroundController>();
+
+        backgroundController.setColor(Color.white);
+    }
+
+    void OnMouseEnter() {
+        transform.position = new Vector3(transform.position.x, transform.position.y, -1);
+        transform.localScale = new Vector3(1.05f, 1.05f, 1);
+    }
+
+    void OnMouseExit() {
+        transform.position = new Vector3(transform.position.x, transform.position.y, 0);
+        transform.localScale = Vector3.one;
     }
 
     void handleInput() {
