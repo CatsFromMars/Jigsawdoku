@@ -23,8 +23,7 @@ public class PieceWrapper : MonoBehaviour {
     private MeshCollider collider;
     private Quaternion targetRotation;
 
-    private int pieceRow;
-    private int pieceCol;
+    private Vector3 localMousePosition;
 
 	void Awake() {
 		board = GameObject.FindGameObjectWithTag("Board");
@@ -119,11 +118,12 @@ public class PieceWrapper : MonoBehaviour {
     
     void OnMouseDrag() {
         boardWrapper.selectedPiece = this.piece;
+        
         Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0);
         Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint);
 
-        float newX = Mathf.Clamp(curPosition.x, -13, 13);
-        float newY = Mathf.Clamp(curPosition.y, -10, 5);
+        float newX = Mathf.Clamp(curPosition.x - localMousePosition.x, -13, 13);
+        float newY = Mathf.Clamp(curPosition.y - localMousePosition.y, -10, 5);
         
         transform.position = new Vector3(newX, newY, -1);
         handleInput();
@@ -146,6 +146,15 @@ public class PieceWrapper : MonoBehaviour {
     void OnMouseEnter() {
         transform.position = new Vector3(transform.position.x, transform.position.y, -1);
         transform.localScale = new Vector3(1.05f, 1.05f, 1);
+    }
+
+    void OnMouseOver() {
+        Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0);
+        Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint);
+
+        if (!Input.GetMouseButton(0)) {
+            localMousePosition = curPosition - transform.position;
+        }
     }
 
     void OnMouseExit() {
