@@ -6,14 +6,17 @@ public class RetryButton : _PressableButton {
     public Material normalSprite;
     public Material hoverSprite;
     public Material pressedSprite;
-
+	public int width = 256;
+	public int height = 256;
     override
     public Material getNormalSprite() {
+		transform.rotation = Quaternion.identity;
         return normalSprite;
     }
 
     override
     public Material getHoverSprite() {
+		transform.Rotate (Vector3.forward * -90 * Time.deltaTime * 5);
         return hoverSprite;
     }
 
@@ -24,12 +27,12 @@ public class RetryButton : _PressableButton {
     
     override
     public Vector2 getDimensions() {
-        return new Vector2(603, 286);
+        return new Vector2(width, height);
     }
     
     override
     public float getScaleFactor() {
-        return 120;
+        return 80;
     }
     
     override

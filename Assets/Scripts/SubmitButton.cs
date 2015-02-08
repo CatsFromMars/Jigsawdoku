@@ -8,11 +8,13 @@ public class SubmitButton : _PressableButton {
     
     override
     public Material getNormalSprite() {
+		transform.rotation = Quaternion.identity;
         return normalSprite;
     }
     
     override
     public Material getHoverSprite() {
+		transform.Rotate (Vector3.forward * -90 * Time.deltaTime * 5);
         return hoverSprite;
     }
     
@@ -23,12 +25,12 @@ public class SubmitButton : _PressableButton {
     
     override
     public Vector2 getDimensions() {
-        return new Vector2(653, 286);
+        return new Vector2(256, 256);
     }
     
     override
     public float getScaleFactor() {
-        return 120;
+        return 80;
     }
     
     override

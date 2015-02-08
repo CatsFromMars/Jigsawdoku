@@ -26,9 +26,21 @@ public class PieceWrapper : MonoBehaviour {
     private Vector2 localMouseXY;
     private int rotateDelay;
 
+	private GameObject mainAudio;
+	private AudioSource mainAudioSource;
+
+	private GameObject rotIcon;
+	private GameObject rotIconBottom;
+	private GameObject displayedRotationIconTop;
+	private GameObject displayedRotationIconBottom;
+
 	void Awake() {
 		board = GameObject.FindGameObjectWithTag("Board");
 		boardWrapper = board.GetComponent<BoardWrapper>();
+		mainAudio = GameObject.FindGameObjectWithTag("Audio");
+		mainAudioSource = mainAudio.GetComponent<AudioSource>();
+		rotIcon = Resources.Load ("XIcon") as GameObject;
+		rotIconBottom = Resources.Load ("ZIcon") as GameObject;
 	}
 
     void Start() {
@@ -123,7 +135,30 @@ public class PieceWrapper : MonoBehaviour {
         }
     }
     
+
+	void OnMouseDown() {
+		//Play audio
+		mainAudioSource.clip = Resources.Load("PickupPiece") as AudioClip;
+		mainAudioSource.Play();
+
+		//Spawn Rotation Icon
+		float top = (piece.getHeight()) - (piece.getHeight()/3);
+		Vector2 offset = new Vector2(0, top);
+		Vector2 offset2 = new Vector2(0, top*-1);
+		Vector2 pos = new Vector2(transform.position.x, transform.position.y);
+
+		//Display X
+		displayedRotationIconTop = Instantiate(rotIcon, pos + offset, Quaternion.identity) as GameObject;
+		//Display Z
+		displayedRotationIconBottom = Instantiate(rotIconBottom, pos + offset2, Quaternion.identity) as GameObject;
+
+		//parent icon to piece
+		displayedRotationIconTop.transform.parent = this.gameObject.transform;
+		displayedRotationIconBottom.transform.parent = this.gameObject.transform;
+	}
+
     void OnMouseDrag() {
+
         boardWrapper.selectedPiece = this.piece;
 
         Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0);
@@ -154,12 +189,20 @@ public class PieceWrapper : MonoBehaviour {
     }
 
     void OnMouseUp() {
+		//play audio
+		mainAudioSource.clip = Resources.Load("PutdownPiece") as AudioClip;
+		mainAudioSource.Play();
+
         snapPieces();
         
         GameObject background = GameObject.FindGameObjectWithTag("BackgroundEffect");
         BackgroundController backgroundController = background.GetComponent<BackgroundController>();
 
         backgroundController.setColor(Color.white);
+
+		//Destroy rotation icon
+		Destroy(displayedRotationIconTop);
+		Destroy(displayedRotationIconBottom);
     }
 
     void OnMouseEnter() {
