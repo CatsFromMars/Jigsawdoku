@@ -26,6 +26,8 @@ public class PieceWrapper : MonoBehaviour {
     private Vector2 localMouseXY;
     private int rotateDelay;
 
+    private bool snapped;
+
 	void Awake() {
 		board = GameObject.FindGameObjectWithTag("Board");
 		boardWrapper = board.GetComponent<BoardWrapper>();
@@ -124,7 +126,7 @@ public class PieceWrapper : MonoBehaviour {
     }
     
     void OnMouseDrag() {
-        boardWrapper.selectedPiece = this.piece;
+        snapped = false;
 
         Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0);
         Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint);
@@ -177,7 +179,11 @@ public class PieceWrapper : MonoBehaviour {
     }
 
     void OnMouseExit() {
-        transform.position = new Vector3(transform.position.x, transform.position.y, 0);
+        if (snapped) {
+            transform.position = new Vector3(transform.position.x, transform.position.y, 1);
+        } else {
+            transform.position = new Vector3(transform.position.x, transform.position.y, 0);
+        }
         transform.localScale = Vector3.one;
     }
 
@@ -218,9 +224,12 @@ public class PieceWrapper : MonoBehaviour {
                 y = Mathf.Round(transform.position.y - 0.5f) + 0.5f;
             }
             
-            Vector3 newPosition = new Vector3(x, y, z);
+            Vector3 newPosition = new Vector3(x, y, 1);
 
-            transform.position = newPosition;
+            if (boardWrapper.getBoard().canPlacePiece(getPiece(), newPosition)) {
+                transform.position = newPosition;
+                snapped = true;
+            }
         }
     }
     
@@ -243,5 +252,9 @@ public class PieceWrapper : MonoBehaviour {
 
     public Piece getPiece() {
         return piece;
+    }
+
+    public bool isSnapped() {
+        return snapped;
     }
 }
