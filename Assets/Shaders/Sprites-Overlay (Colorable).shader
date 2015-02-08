@@ -1,4 +1,4 @@
-Shader "Custom/Sprites/Silhouette (Colorable)"
+Shader "Custom/Sprites/Overlay (Colorable, No Alpha)"
 {
 	Properties
 	{
@@ -22,7 +22,7 @@ Shader "Custom/Sprites/Silhouette (Colorable)"
 		Lighting Off
 		ZWrite Off
 		Fog { Mode Off }
-		Blend SrcAlpha OneMinusSrcAlpha
+		Blend DstColor SrcAlpha
 
 		Pass
 		{
@@ -66,7 +66,9 @@ Shader "Custom/Sprites/Silhouette (Colorable)"
 			fixed4 frag(v2f IN) : SV_Target
 			{
 				fixed4 c = tex2D(_MainTex, IN.texcoord);
-				return fixed4(IN.color.rgb,c.a);
+                c.rgb += IN.color.rgb;
+				c.rgb *= c.a;
+				return c;
 			}
 		ENDCG
 		}
