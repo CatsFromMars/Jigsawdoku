@@ -23,12 +23,12 @@ public class SubmitButton : _PressableButton {
     
     override
     public Vector2 getDimensions() {
-        return new Vector2(2142, 1145);
+        return new Vector2(653, 286);
     }
     
     override
     public float getScaleFactor() {
-        return 500;
+        return 120;
     }
     
     override
