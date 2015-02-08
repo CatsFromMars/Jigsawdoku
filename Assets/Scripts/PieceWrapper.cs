@@ -26,17 +26,14 @@ public class PieceWrapper : MonoBehaviour {
     private Vector2 localMouseXY;
     private int rotateDelay;
 
-<<<<<<< HEAD
 	private GameObject mainAudio;
 	private AudioSource mainAudioSource;
-
+	private Piece selectedPiece;
 	private GameObject rotIcon;
 	private GameObject rotIconBottom;
 	private GameObject displayedRotationIconTop;
 	private GameObject displayedRotationIconBottom;
-=======
     private bool snapped;
->>>>>>> 203e48d40aa97029357745e4d76b187a308c78ec
 
 	void Awake() {
 		board = GameObject.FindGameObjectWithTag("Board");
@@ -162,12 +159,9 @@ public class PieceWrapper : MonoBehaviour {
 	}
 
     void OnMouseDrag() {
-<<<<<<< HEAD
 
         boardWrapper.selectedPiece = this.piece;
-=======
         snapped = false;
->>>>>>> 203e48d40aa97029357745e4d76b187a308c78ec
 
         Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0);
         Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint);

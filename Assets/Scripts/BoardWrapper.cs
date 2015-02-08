@@ -8,7 +8,7 @@ public class BoardWrapper : MonoBehaviour {
     public Material overlaySprite;
 
     private Board board;
-
+	public Piece selectedPiece;
     private GameObject quad;
     private GameObject overlayQuad;
 
