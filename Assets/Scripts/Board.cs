@@ -51,13 +51,10 @@ public class Board {
     }
 
     private void updateBoardInts() {
-        // Reset board
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                boardNumbers[i,j] = 0;
-            }
-        }
+        resetBoard();
 
+        addSnappedPiecesToBoard();
+        /*
         foreach (GameObject obj in pieceContainers) {
             PieceWrapper pieceWrapper = obj.GetComponent<PieceWrapper>();
             Piece piece = pieceWrapper.getPiece();
@@ -82,8 +79,78 @@ public class Board {
                 }
             }
         }
+        */
 
         Debug.Log(ToString());
+    }
+
+    public bool canPlacePiece(Piece piece, Vector3 position) {
+        resetBoard();
+
+        addSnappedPiecesToBoard();
+
+        int[,] pieceNumbers = piece.to2DArray();
+        float xOffset = (piece.getWidth()-1)/2.0f;
+        float yOffset = (piece.getHeight()-1)/2.0f;
+        
+        int pieceRow = 4 - (int)(position.y + yOffset);
+        int pieceCol = 4 + (int)(position.x - xOffset);
+
+        
+        for (int i = 0; i < piece.getHeight(); i++) {
+            for (int j = 0; j < piece.getWidth(); j++) {
+                try {
+                    if (pieceNumbers[i,j] != 0) {
+                        if (boardNumbers[pieceRow + i, pieceCol + j] != 0) {
+                            return false;
+                        }
+                    }
+                }
+                catch {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+    
+    private void resetBoard() {
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                boardNumbers[i,j] = 0;
+            }
+        }
+    }
+
+    private void addSnappedPiecesToBoard() {
+        foreach (GameObject obj in pieceContainers) {
+            PieceWrapper pieceWrapper = obj.GetComponent<PieceWrapper>();
+
+            if (pieceWrapper.isSnapped()) {
+                Piece piece = pieceWrapper.getPiece();
+                int[,] pieceNumbers = piece.to2DArray();
+                
+                float xOffset = (piece.getWidth()-1)/2.0f;
+                float yOffset = (piece.getHeight()-1)/2.0f;
+
+                int pieceRow = 4 - (int)(obj.transform.position.y + yOffset);
+                int pieceCol = 4 + (int)(obj.transform.position.x - xOffset);
+                
+                for (int i = 0; i < piece.getHeight(); i++) {
+                    for (int j = 0; j < piece.getWidth(); j++) {
+                        try {
+                            if (pieceNumbers[i,j] != 0) {
+                                boardNumbers[pieceRow + i, pieceCol + j] = pieceNumbers[i,j];
+                            }
+                        }
+                        catch {
+                            // Do nothing
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public void setPieces(GameObject[] pieces) {
