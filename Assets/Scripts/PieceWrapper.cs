@@ -35,7 +35,17 @@ public class PieceWrapper : MonoBehaviour {
 	private GameObject displayedRotationIconBottom;
     private bool snapped;
 
-	void Awake() {
+
+	public void SetData(Piece p, Color c1, Color c2)
+	{
+		piece = p;
+		numberColor = c1;
+		backColor = c2;
+	}
+
+
+	public void AwakePiece() {
+
 		board = GameObject.FindGameObjectWithTag("Board");
 		boardWrapper = board.GetComponent<BoardWrapper>();
 		mainAudio = GameObject.FindGameObjectWithTag("Audio");
@@ -44,8 +54,8 @@ public class PieceWrapper : MonoBehaviour {
 		rotIconBottom = Resources.Load ("ZIcon") as GameObject;
 	}
 
-    void Start() {
-        piece = Piece.fromSerializable2DIntArray(serializablePieceNumbers);
+    public void StartPiece() {
+        //piece = Piece.fromSerializable2DIntArray(serializablePieceNumbers);
 
         // Adding tiles in a wrapper object
         numberContainer = new GameObject("numbers");

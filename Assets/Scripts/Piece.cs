@@ -7,7 +7,7 @@ public class Piece {
     private int width;
     private int height;
 
-    private Piece(int[,] nums) {
+    public Piece(int[,] nums) {
         this.numbers = nums;
         this.width = nums.GetLength(1);
         this.height = nums.GetLength(0);
