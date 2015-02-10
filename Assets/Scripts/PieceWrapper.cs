@@ -44,11 +44,11 @@ public class PieceWrapper : MonoBehaviour {
 	}
 
 	void Awake() {
-		AwakePiece ();
+		//AwakePiece ();
 	}
 
 	void Start() {
-		StartPiece ();
+		//StartPiece ();
 	}
 	public void AwakePiece() {
 
@@ -61,8 +61,9 @@ public class PieceWrapper : MonoBehaviour {
 	}
 
     public void StartPiece() {
-		if (piece == null) 
-        piece = Piece.fromSerializable2DIntArray(serializablePieceNumbers);
+		if (piece == null) {
+						piece = Piece.fromSerializable2DIntArray (serializablePieceNumbers);
+				}
 
         // Adding tiles in a wrapper object
         numberContainer = new GameObject("numbers");
