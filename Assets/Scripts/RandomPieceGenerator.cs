@@ -22,8 +22,8 @@ public class RandomPieceGenerator : MonoBehaviour
 		Square[,] board = new Square[9, 9];
 		int maxPieceSize = 9;
 		int minPieceSize = 6;
-		ArrayList jigsawPieces = new ArrayList ();
-
+		List<int[,]> jigsawPieces = new List<int[,]> ();
+		ArrayList jigsawPiecesPlaceholder = new ArrayList ();
 		// Use this for initialization
 		void Start ()
 		{
@@ -40,6 +40,8 @@ public class RandomPieceGenerator : MonoBehaviour
 				}
 
 				GenerateRandomPieces ();
+				MakePieces (jigsawPieces);
+
 		}
 	
 		// Update is called once per frame
@@ -100,15 +102,20 @@ public class RandomPieceGenerator : MonoBehaviour
 				// keep a track of piece, which is just an array of squares
 				//Square[] piece = new Square[max];
 				List<Square> piece = new List<Square> ();
-				for (int i = 0; i < piece.Count; ++i) {
-						piece [i] = new Square ();
+				int[,] jaggedArray = new int[9, 9];
+				for (int i = 0; i < 9; i++) {
+						for (int j = 0; j < 9; j++) {
+								jaggedArray [i, j] = 0;
+						}
 				}
+				jaggedArray [row, col] = board [row, col].number;
 				piece.Add (board [row, col]);
 				int found = 1;
 				Square adjacent = FindRandomAdjacentPiece (row, col);
 				while (adjacent != null && found < max) {
 						// add adjacent to array;
 						piece.Add (adjacent);
+						jaggedArray [adjacent.row, adjacent.col] = adjacent.number;
 						//piece [found] = adjacent;
 						found ++;
 						// find next adjacent piece, if piece still needs to be built
@@ -122,6 +129,11 @@ public class RandomPieceGenerator : MonoBehaviour
 				// change its format to [][,] of ints
 				// for each int 
 				
+				
+					
+				jigsawPieces.Add (jaggedArray);
+				
+
 				// now make a new gameobject for this piece. 
 				PrintPiece (piece);
 				return found - 1;
@@ -217,14 +229,14 @@ public class RandomPieceGenerator : MonoBehaviour
 				}
 		}
 
-		public void MakePieces (int[][,] jaggedArray)
-		{
-	
-				for (int i = 0; i < jaggedArray.Length; i++) {
-						Piece p = new Piece (jaggedArray [i]); 
-						jigsawPieces.Add (p);
+		public void MakePieces (List<int[,]> piecesList)
+		{			
+				foreach (int[,] piece in piecesList) {
+						Piece p = new Piece (piece); 
+						jigsawPiecesPlaceholder.Add (p);
 				}
-				foreach (Piece p in jigsawPieces) {
+				
+				foreach (Piece p in jigsawPiecesPlaceholder) {
 						Color c2 = new Color (UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value);
 						Color c1 = new Color (UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value);
 						int xAxis = UnityEngine.Random.Range (7, 12);

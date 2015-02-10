@@ -43,7 +43,13 @@ public class PieceWrapper : MonoBehaviour {
 		backColor = c2;
 	}
 
+	void Awake() {
+		AwakePiece ();
+	}
 
+	void Start() {
+		StartPiece ();
+	}
 	public void AwakePiece() {
 
 		board = GameObject.FindGameObjectWithTag("Board");
@@ -55,7 +61,8 @@ public class PieceWrapper : MonoBehaviour {
 	}
 
     public void StartPiece() {
-        //piece = Piece.fromSerializable2DIntArray(serializablePieceNumbers);
+		if (piece == null) 
+        piece = Piece.fromSerializable2DIntArray(serializablePieceNumbers);
 
         // Adding tiles in a wrapper object
         numberContainer = new GameObject("numbers");
