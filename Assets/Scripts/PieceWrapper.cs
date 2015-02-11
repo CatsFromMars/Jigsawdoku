@@ -142,7 +142,7 @@ public class PieceWrapper : MonoBehaviour {
 
     void OnMouseDown() {
         //Play audio
-        mainAudioSource.clip = Resources.Load("PickupPiece") as AudioClip;
+        mainAudioSource.clip = Resources.Load("Audio/PickupPiece") as AudioClip;
         mainAudioSource.Play();
 
         //Spawn Rotation Icon
@@ -192,12 +192,19 @@ public class PieceWrapper : MonoBehaviour {
     }
 
     void OnMouseUp() {
-        //play audio
-        mainAudioSource.clip = Resources.Load("PutdownPiece") as AudioClip;
-        mainAudioSource.Play();
 
         snapPieces();
-        
+
+        if (snapped) {
+            // play snapped audio
+            mainAudioSource.clip = Resources.Load("Audio/SnapPiece") as AudioClip;
+            mainAudioSource.Play();
+        } else {
+            // play put down audio
+            mainAudioSource.clip = Resources.Load("Audio/PutDownPiece") as AudioClip;
+            mainAudioSource.Play();
+        }
+
         GameObject background = GameObject.FindGameObjectWithTag("BackgroundEffect");
         BackgroundController backgroundController = background.GetComponent<BackgroundController>();
 

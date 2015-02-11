@@ -30,7 +30,7 @@ public class BoardWrapper : MonoBehaviour {
         quad.renderer.material.color = boardColor;
 
         overlayQuad.renderer.material = overlaySprite;
-        overlayQuad.renderer.material.color = Color.black * 0.5f;
+        overlayQuad.renderer.material.color = Color.black * 0.7f;
         
         Destroy(quad.GetComponent<MeshCollider>());
         Destroy(overlayQuad.GetComponent<MeshCollider>());
@@ -44,7 +44,7 @@ public class BoardWrapper : MonoBehaviour {
     }
 
     public void showOverlay() {
-        overlayQuad.renderer.material.color = Color.black * 0.5f;
+        overlayQuad.renderer.material.color = Color.black * 0.7f;
     }
 
     public void hideOverlay() {
