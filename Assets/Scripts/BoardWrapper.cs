@@ -37,6 +37,7 @@ public class BoardWrapper : MonoBehaviour {
 
         GameObject[] pieces = GameObject.FindGameObjectsWithTag("Piece");
         board.setPieces(pieces);
+
 	}
 
     public Board getBoard() {

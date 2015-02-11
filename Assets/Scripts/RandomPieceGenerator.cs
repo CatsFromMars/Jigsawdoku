@@ -250,8 +250,11 @@ public class RandomPieceGenerator : MonoBehaviour {
                 y *= -1;
             }
 
-            GameObject t = (GameObject)GameObject.Instantiate(piecePrefab, new Vector3(x, y, 0), Quaternion.identity);
-            t.GetComponent<PieceWrapper>().SetData(p, numberColor, tileColor);
+            GameObject t = (GameObject)GameObject.Instantiate(piecePrefab);//, new Vector3(x, y, 0), Quaternion.identity);
+            PieceWrapper pieceWrapper = t.GetComponent<PieceWrapper>();
+
+            pieceWrapper.SetData(p, numberColor, tileColor);
+            pieceWrapper.makeHint();
 
             //No need to call awake/start (They are automatically called after this.)
             counter++;

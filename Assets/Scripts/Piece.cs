@@ -1,11 +1,24 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+public class AABB {
+
+    public int minX, maxX, minY, maxY;
+
+    public AABB(int minX, int maxX, int minY, int maxY) {
+        this.minX = minX;
+        this.maxX = maxX;
+        this.minY = minY;
+        this.maxY = maxY;
+    }
+}
+
 public class Piece {
 
     private int[,] numbers;
     private int width;
     private int height;
+    private Vector2 correctPosition;
 
     public Piece(int[,] nums) {
         this.numbers = trimPaddingZeros(nums);
@@ -53,8 +66,25 @@ public class Piece {
         return height;
     }
 
-    private static int[,] trimPaddingZeros(int[,] a) {
+    private int[,] trimPaddingZeros(int[,] a) {
+        AABB aabb = getAABB(a);
+
+        int[,] trimmed = new int[aabb.maxY - aabb.minY + 1, aabb.maxX - aabb.minX + 1];
+
+        for (int i = 0; i < trimmed.GetLength(0); i++) {
+            for (int j = 0; j < trimmed.GetLength(1); j++) {
+                trimmed[i,j] = a[i + aabb.minY, j + aabb.minX];
+            }
+        }
+
+        correctPosition = new Vector2(aabb.minX, aabb.minY);
+
+        return trimmed;
+    }
+
+    private AABB getAABB(int[,] a) {
         int minX = 0, minY = 0, maxX = 0, maxY = 0;
+        
         int width = a.GetLength(1);
         int height = a.GetLength(0);
 
@@ -67,12 +97,12 @@ public class Piece {
                     break;
                 }
             }
-
+            
             if (!flag) {
                 minX = i;
             }
         }
-
+        
         // Get minY (inclusive)
         flag = true;
         for (int i = 0; i < height && flag; i++) {
@@ -82,12 +112,12 @@ public class Piece {
                     break;
                 }
             }
-
+            
             if (!flag) {
                 minY = i;
             }
         }
-
+        
         // Get maxX (inclusive)
         flag = true;
         for (int i = width - 1; i >= minX && flag; i--) {
@@ -97,12 +127,12 @@ public class Piece {
                     break;
                 }
             }
-
+            
             if (!flag) {
                 maxX = i;
             }
         }
-
+        
         // Get maxY (inclusive)
         flag = true;
         for (int i = height - 1; i >= minY && flag; i--) {
@@ -112,21 +142,17 @@ public class Piece {
                     break;
                 }
             }
-
+            
             if (!flag) {
                 maxY = i;
             }
         }
 
-        int[,] trimmed = new int[maxY - minY + 1, maxX - minX + 1];
+        return new AABB(minX, maxX, minY, maxY);
+    }
 
-        for (int i = 0; i < trimmed.GetLength(0); i++) {
-            for (int j = 0; j < trimmed.GetLength(1); j++) {
-                trimmed[i,j] = a[i + minY, j + minX];
-            }
-        }
-
-        return trimmed;
+    public Vector2 getCorrectPosition() {
+        return correctPosition;
     }
 
     // Not used anymore, but may be useful for debugging

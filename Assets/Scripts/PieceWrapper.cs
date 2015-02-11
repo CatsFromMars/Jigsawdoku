@@ -32,6 +32,7 @@ public class PieceWrapper : MonoBehaviour {
     private GameObject displayedRotationIconTop;
     private GameObject displayedRotationIconBottom;
     private bool snapped;
+    private bool hint;
 
     public void Awake() {
         boardContainer = GameObject.FindGameObjectWithTag("Board");
@@ -132,6 +133,21 @@ public class PieceWrapper : MonoBehaviour {
         float newY = Mathf.Clamp(y, -10, 5);
         
         transform.position = new Vector3(newX, newY, 0);
+
+        if (hint) {
+            float xOffset = (piece.getWidth()-1)/2.0f;
+            float yOffset = (piece.getHeight()-1)/2.0f;
+
+            int correctRow = (int)(piece.getCorrectPosition().y);
+            int correctCol = (int)(piece.getCorrectPosition().x);
+            
+            float correctY = 4 - correctRow - yOffset;
+            float correctX = correctCol - 4 + xOffset;
+
+            transform.position = new Vector3(correctX, correctY, 0);
+
+            snapPiece();
+        }
     }
 
     void Update() {
@@ -193,7 +209,7 @@ public class PieceWrapper : MonoBehaviour {
 
     void OnMouseUp() {
 
-        snapPieces();
+        snapPiece();
 
         if (snapped) {
             // play snapped audio
@@ -248,7 +264,7 @@ public class PieceWrapper : MonoBehaviour {
         }
     }
 
-    void snapPieces() {
+    void snapPiece() {
         float adjustX = (piece.getWidth() - 1) / 2.0f;
         float adjustY = (piece.getHeight() - 1) / 2.0f;
 
@@ -313,5 +329,9 @@ public class PieceWrapper : MonoBehaviour {
         piece = p;
         numberColor = c1;
         backColor = c2;
+    }
+
+    public void makeHint() {
+        hint = true;
     }
 }
