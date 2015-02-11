@@ -12,6 +12,9 @@ public class VoronoiGenerator : MonoBehaviour {
 
     public GameObject piecePrefab;
     public PuzzleDatabase database;
+
+    public int numberOfPieces;
+    public int numberOfHints;
     
     public ColorPair[] colorTable;
 
@@ -30,7 +33,7 @@ public class VoronoiGenerator : MonoBehaviour {
             }
         }
 
-        generateVoronoiPieces(25, 5);
+        generateVoronoiPieces(numberOfPieces, numberOfHints);
 	}
 
     private void generateVoronoiPieces(int numPoints, int numHints) {
@@ -95,10 +98,18 @@ public class VoronoiGenerator : MonoBehaviour {
             
             GameObject t = (GameObject)GameObject.Instantiate(piecePrefab, new Vector3(x, y, 0), Quaternion.identity);
             PieceWrapper pieceWrapper = t.GetComponent<PieceWrapper>();
-            
-            pieceWrapper.SetData(p, numberColor, tileColor);
+
             if (i < numHints) {
                 pieceWrapper.makeHint();
+                pieceWrapper.SetData(p, Color.black, Color.black);
+            }
+            else {
+                for (int j = 0; j < 3; j++) {
+                    if (UnityEngine.Random.value < 0.5) {
+                        p.rotateClockwise();
+                    }
+                }
+                pieceWrapper.SetData(p, numberColor, tileColor);
             }
         }
     }

@@ -52,11 +52,6 @@ public class PieceWrapper : MonoBehaviour {
             Destroy(gameObject);
         }
 
-        if (hint) {
-            numberColor = Color.black;
-            backColor = Color.black;
-        }
-
         // Adding tiles in a wrapper object
         numberContainer = new GameObject("numbers");
         numberContainer.transform.parent = transform;
