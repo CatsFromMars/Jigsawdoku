@@ -54,32 +54,6 @@ public class Board {
         resetBoard();
 
         addSnappedPiecesToBoard();
-        /*
-        foreach (GameObject obj in pieceContainers) {
-            PieceWrapper pieceWrapper = obj.GetComponent<PieceWrapper>();
-            Piece piece = pieceWrapper.getPiece();
-            int[,] pieceNumbers = piece.to2DArray();
-
-            float xOffset = (piece.getWidth()-1)/2.0f;
-            float yOffset = (piece.getHeight()-1)/2.0f;
-
-            int pieceRow = 4 - (int)(obj.transform.position.y + yOffset);
-            int pieceCol = 4 + (int)(obj.transform.position.x - xOffset);
-
-            for (int i = 0; i < piece.getHeight(); i++) {
-                for (int j = 0; j < piece.getWidth(); j++) {
-                    try {
-                        if (pieceNumbers[i,j] != 0) {
-                            boardNumbers[pieceRow + i, pieceCol + j] = pieceNumbers[i,j];
-                        }
-                    }
-                    catch {
-                        // Do nothing
-                    }
-                }
-            }
-        }
-        */
 
         Debug.Log(ToString());
     }

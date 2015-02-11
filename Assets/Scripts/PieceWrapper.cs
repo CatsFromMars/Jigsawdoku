@@ -15,55 +15,41 @@ public class PieceWrapper : MonoBehaviour {
     public Material backSprite;
     public Material silhouette;
     public Serializable2DIntArray[] serializablePieceNumbers;
-    public GameObject board;
-    public BoardWrapper boardWrapper;
 
+    private GameObject boardContainer;
+    private BoardWrapper boardWrapper;
     private Piece piece;
     private GameObject numberContainer;
     private MeshCollider collider;
     private Quaternion targetRotation;
-
     private Vector2 localMouseXY;
     private int rotateDelay;
-
-	private GameObject mainAudio;
-	private AudioSource mainAudioSource;
-	private Piece selectedPiece;
-	private GameObject rotIcon;
-	private GameObject rotIconBottom;
-	private GameObject displayedRotationIconTop;
-	private GameObject displayedRotationIconBottom;
+    private GameObject mainAudio;
+    private AudioSource mainAudioSource;
+    private Piece selectedPiece;
+    private GameObject rotIcon;
+    private GameObject rotIconBottom;
+    private GameObject displayedRotationIconTop;
+    private GameObject displayedRotationIconBottom;
     private bool snapped;
 
+    public void Awake() {
+        boardContainer = GameObject.FindGameObjectWithTag("Board");
+        boardWrapper = boardContainer.GetComponent<BoardWrapper>();
+        mainAudio = GameObject.FindGameObjectWithTag("Audio");
+        mainAudioSource = mainAudio.GetComponent<AudioSource>();
+        rotIcon = Resources.Load("XIcon") as GameObject;
+        rotIconBottom = Resources.Load("ZIcon") as GameObject;
+    }
 
-	public void SetData(Piece p, Color c1, Color c2)
-	{
-		piece = p;
-		numberColor = c1;
-		backColor = c2;
-	}
+    public void Start() {
+        if (serializablePieceNumbers != null && serializablePieceNumbers.Length > 0) {
+            piece = Piece.fromSerializable2DIntArray(serializablePieceNumbers);
+        }
 
-	void Awake() {
-		//AwakePiece ();
-	}
-
-	void Start() {
-		//StartPiece ();
-	}
-	public void AwakePiece() {
-
-		board = GameObject.FindGameObjectWithTag("Board");
-		boardWrapper = board.GetComponent<BoardWrapper>();
-		mainAudio = GameObject.FindGameObjectWithTag("Audio");
-		mainAudioSource = mainAudio.GetComponent<AudioSource>();
-		rotIcon = Resources.Load ("XIcon") as GameObject;
-		rotIconBottom = Resources.Load ("ZIcon") as GameObject;
-	}
-
-    public void StartPiece() {
-		if (piece == null) {
-						piece = Piece.fromSerializable2DIntArray (serializablePieceNumbers);
-				}
+        if (piece == null) {
+            Destroy(gameObject);
+        }
 
         // Adding tiles in a wrapper object
         numberContainer = new GameObject("numbers");
@@ -72,7 +58,7 @@ public class PieceWrapper : MonoBehaviour {
 
         int[,] pieceNumbers = piece.to2DArray();
 
-        Vector3 centerOffset = new Vector3((pieceNumbers.GetLength(1)-1)/2.0f, -(pieceNumbers.GetLength(0)-1)/2.0f, 0);
+        Vector3 centerOffset = new Vector3((pieceNumbers.GetLength(1) - 1) / 2.0f, -(pieceNumbers.GetLength(0) - 1) / 2.0f, 0);
 
         for (int i = 0; i < piece.getHeight(); i++) {
             for (int j = 0; j < piece.getWidth(); j++) {
@@ -153,32 +139,29 @@ public class PieceWrapper : MonoBehaviour {
             rotateDelay--;
         }
     }
-    
 
-	void OnMouseDown() {
-		//Play audio
-		mainAudioSource.clip = Resources.Load("PickupPiece") as AudioClip;
-		mainAudioSource.Play();
+    void OnMouseDown() {
+        //Play audio
+        mainAudioSource.clip = Resources.Load("PickupPiece") as AudioClip;
+        mainAudioSource.Play();
 
-		//Spawn Rotation Icon
-		float top = (piece.getHeight()) - (piece.getHeight()/3);
-		Vector2 offset = new Vector2(0, top);
-		Vector2 offset2 = new Vector2(0, top*-1);
-		Vector2 pos = new Vector2(transform.position.x, transform.position.y);
+        //Spawn Rotation Icon
+        float top = (piece.getHeight()) - (piece.getHeight() / 3);
+        Vector2 offset = new Vector2(0, top);
+        Vector2 offset2 = new Vector2(0, top * -1);
+        Vector2 pos = new Vector2(transform.position.x, transform.position.y);
 
-		//Display X
-		displayedRotationIconTop = Instantiate(rotIcon, pos + offset, Quaternion.identity) as GameObject;
-		//Display Z
-		displayedRotationIconBottom = Instantiate(rotIconBottom, pos + offset2, Quaternion.identity) as GameObject;
+        //Display X
+        //displayedRotationIconTop = Instantiate(rotIcon, pos + offset, Quaternion.identity) as GameObject;
+        //Display Z
+        //displayedRotationIconBottom = Instantiate(rotIconBottom, pos + offset2, Quaternion.identity) as GameObject;
 
-		//parent icon to piece
-		displayedRotationIconTop.transform.parent = this.gameObject.transform;
-		displayedRotationIconBottom.transform.parent = this.gameObject.transform;
-	}
+        //parent icon to piece
+        //displayedRotationIconTop.transform.parent = this.gameObject.transform;
+        //displayedRotationIconBottom.transform.parent = this.gameObject.transform;
+    }
 
     void OnMouseDrag() {
-
-        boardWrapper.selectedPiece = this.piece;
         snapped = false;
 
         Vector3 curScreenPoint = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0);
@@ -209,9 +192,9 @@ public class PieceWrapper : MonoBehaviour {
     }
 
     void OnMouseUp() {
-		//play audio
-		mainAudioSource.clip = Resources.Load("PutdownPiece") as AudioClip;
-		mainAudioSource.Play();
+        //play audio
+        mainAudioSource.clip = Resources.Load("PutdownPiece") as AudioClip;
+        mainAudioSource.Play();
 
         snapPieces();
         
@@ -220,9 +203,9 @@ public class PieceWrapper : MonoBehaviour {
 
         backgroundController.setColor(Color.white);
 
-		//Destroy rotation icon
-		Destroy(displayedRotationIconTop);
-		Destroy(displayedRotationIconBottom);
+        //Destroy rotation icon
+        Destroy(displayedRotationIconTop);
+        Destroy(displayedRotationIconBottom);
     }
 
     void OnMouseEnter() {
@@ -296,7 +279,7 @@ public class PieceWrapper : MonoBehaviour {
     
     void rotateClockwise() {
         targetRotation *= Quaternion.Euler(0, 0, -90);
-		piece.rotateClockwise();
+        piece.rotateClockwise();
     }
     
     void rotateCounterClockwise() {
@@ -304,12 +287,12 @@ public class PieceWrapper : MonoBehaviour {
         piece.rotateCounterClockwise();
     }
 
-	IEnumerator rotatePiece() {
+    IEnumerator rotatePiece() {
         while (true) {
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 10);
             yield return 0;
         }
-	}
+    }
 
     public Piece getPiece() {
         return piece;
@@ -317,5 +300,11 @@ public class PieceWrapper : MonoBehaviour {
 
     public bool isSnapped() {
         return snapped;
+    }
+    
+    public void SetData(Piece p, Color c1, Color c2) {
+        piece = p;
+        numberColor = c1;
+        backColor = c2;
     }
 }
