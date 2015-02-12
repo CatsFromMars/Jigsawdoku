@@ -8,14 +8,16 @@ public class ColorPair {
     public Color numberColor;
 }
 
+public enum Difficulty {
+    Easy, Normal, Hard, Lunatic, Extra
+}
+
 public class VoronoiGenerator : MonoBehaviour {
 
     public GameObject piecePrefab;
     public PuzzleDatabase database;
 
-    public int numberOfPieces;
-    public int numberOfHints;
-    public int minPieceSize;
+    public Difficulty difficulty;
     
     public ColorPair[] colorTable;
 
@@ -34,7 +36,23 @@ public class VoronoiGenerator : MonoBehaviour {
             }
         }
 
-        generateVoronoiPieces(numberOfPieces, numberOfHints, minPieceSize);
+        switch (difficulty) {
+        case Difficulty.Easy:
+            generateVoronoiPieces(10, 3, 3);
+            break;
+        case Difficulty.Normal:
+            generateVoronoiPieces(20, 3, 3);
+            break;
+        case Difficulty.Hard:
+            generateVoronoiPieces(30, 0, 3);
+            break;
+        case Difficulty.Lunatic:
+            generateVoronoiPieces(40, 0, 2);
+            break;
+        case Difficulty.Extra:
+            generateVoronoiPieces(40, 1, 0);
+            break;
+        }
 	}
 
     private void generateVoronoiPieces(int numPoints, int numHints, int minSize) {
@@ -66,7 +84,7 @@ public class VoronoiGenerator : MonoBehaviour {
             }
         }
 
-        for (int i = 0; i < numPoints; i++) {
+        for (int i = 0, colorIndex = UnityEngine.Random.Range(0,colorTable.Length); i < numPoints; i++) {
             int[,] untrimmedPiece = new int[9,9];
 
             for (int j = 0; j < 9; j++) {
@@ -99,7 +117,7 @@ public class VoronoiGenerator : MonoBehaviour {
             }
             else {
                 if (colorTable.Length > 0) {
-                    ColorPair colorPair = colorTable[i % colorTable.Length];
+                    ColorPair colorPair = colorTable[colorIndex++ % colorTable.Length];
                     numberColor = colorPair.numberColor;
                     tileColor = colorPair.tileColor;
                 }
@@ -119,20 +137,32 @@ public class VoronoiGenerator : MonoBehaviour {
         int minIndex = 0;
         int dx = col - pointLocations[0,1];
         int dy = row - pointLocations[0,0];
-        int distSq = dx * dx + dy * dy;
-        int minDist = distSq;
+        int dist = customDistance(dx, dy);
+        int minDist = dist;
 
         for (int i = 1; i < pointLocations.GetLength(0); i++) {
             dx = col - pointLocations[i,1];
             dy = row - pointLocations[i,0];
-            distSq = dx * dx + dy * dy;
+            dist = customDistance(dx, dy);
 
-            if (distSq < minDist) {
-                minDist = distSq;
+            if (dist < minDist) {
+                minDist = dist;
                 minIndex = i;
             }
         }
 
         return minIndex;
+    }
+
+    private int manhattanDistance(int dx, int dy) {
+        return (int)(Mathf.Abs(dx) + Mathf.Abs(dy));
+    }
+
+    private int euclideanSquared(int dx, int dy) {
+        return dx * dx + dy * dy;
+    }
+
+    private int customDistance(int dx, int dy) {
+        return dx * dx + dy * dy + (dx - dy) * (dx - dy);
     }
 }

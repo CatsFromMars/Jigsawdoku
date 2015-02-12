@@ -20,7 +20,7 @@ public class PieceWrapper : MonoBehaviour {
     private BoardWrapper boardWrapper;
     private Piece piece;
     private GameObject numberContainer;
-    private MeshCollider collider;
+    private new MeshCollider collider;
     private Quaternion targetRotation;
     private Vector2 localMouseXY;
     private int rotateDelay;
