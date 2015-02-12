@@ -78,6 +78,11 @@ public class SubmitButton : _PressableButton {
     }
     */
 	void WinnerIsYou() {
+
+		GameObject timerContainer = GameObject.FindGameObjectWithTag("timer");
+		Timer timer = timerContainer.GetComponentInChildren<Timer>();
+		timer.gameOver=true;
+
 		StartCoroutine(PieceConfetti());
 		//Instantiate(Resources.Load ("CelebrationStars"), transform.position, Quaternion.identity);
 
