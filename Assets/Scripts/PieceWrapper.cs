@@ -20,7 +20,7 @@ public class PieceWrapper : MonoBehaviour {
     private BoardWrapper boardWrapper;
     private Piece piece;
     private GameObject numberContainer;
-    private MeshCollider collider;
+    private new MeshCollider collider;
     private Quaternion targetRotation;
     private Vector2 localMouseXY;
     private int rotateDelay;
@@ -101,27 +101,29 @@ public class PieceWrapper : MonoBehaviour {
             }
         }
 
-        Vector3 savePosition = transform.position;
-        Quaternion saveRotation = transform.rotation;
+        if (!hint) {
+            Vector3 savePosition = transform.position;
+            Quaternion saveRotation = transform.rotation;
         
-        transform.position = new Vector3(0, 0, 0);
-        transform.rotation = Quaternion.Euler(0, 0, 0);
+            transform.position = new Vector3(0, 0, 0);
+            transform.rotation = Quaternion.Euler(0, 0, 0);
 
-        MeshFilter[] meshFilters = GetComponentsInChildren<MeshFilter>();
-        CombineInstance[] combine = new CombineInstance[meshFilters.Length];
-        for (int i = 0; i < meshFilters.Length; i++) {
-            combine[i].mesh = meshFilters[i].sharedMesh;
-            combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
+            MeshFilter[] meshFilters = GetComponentsInChildren<MeshFilter>();
+            CombineInstance[] combine = new CombineInstance[meshFilters.Length];
+            for (int i = 0; i < meshFilters.Length; i++) {
+                combine[i].mesh = meshFilters[i].sharedMesh;
+                combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
+            }
+
+            MeshFilter meshFilter = gameObject.AddComponent<MeshFilter>();
+            meshFilter.mesh.CombineMeshes(combine);
+        
+            collider = gameObject.AddComponent<MeshCollider>();
+            collider.sharedMesh = meshFilter.mesh;
+
+            transform.position = savePosition;
+            transform.rotation = saveRotation;
         }
-
-        MeshFilter meshFilter = gameObject.AddComponent<MeshFilter>();
-        meshFilter.mesh.CombineMeshes(combine);
-        
-        collider = gameObject.AddComponent<MeshCollider>();
-        collider.sharedMesh = meshFilter.mesh;
-
-        transform.position = savePosition;
-        transform.rotation = saveRotation;
 
         targetRotation = Quaternion.Euler(0, 0, 0);
         StartCoroutine(rotatePiece());

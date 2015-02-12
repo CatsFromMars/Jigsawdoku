@@ -11,11 +11,11 @@ class Square {
     public int col = 0;
 };
 
-[System.Serializable]
-public class ColorPair {
-    public Color tileColor;
-    public Color numberColor;
-}
+//[System.Serializable]
+//public class ColorPair {
+//    public Color tileColor;
+//    public Color numberColor;
+//}
 
 public class RandomPieceGenerator : MonoBehaviour { 
 

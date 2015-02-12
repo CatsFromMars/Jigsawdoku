@@ -18,12 +18,21 @@ public class Piece {
     private int[,] numbers;
     private int width;
     private int height;
+    private int numTiles;
     private Vector2 correctPosition;
 
     public Piece(int[,] nums) {
         this.numbers = trimPaddingZeros(nums);
         this.width = this.numbers.GetLength(1);
         this.height = this.numbers.GetLength(0);
+
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                if (numbers[i,j] != 0) {
+                    numTiles++;
+                }
+            }
+        }
     }
 
     public void rotateClockwise() {
@@ -64,6 +73,10 @@ public class Piece {
 
     public int getHeight() {
         return height;
+    }
+
+    public int getNumTiles() {
+        return numTiles;
     }
 
     private int[,] trimPaddingZeros(int[,] a) {
