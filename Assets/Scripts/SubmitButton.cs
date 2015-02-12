@@ -1,10 +1,26 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class SubmitButton : _PressableButton {
     public Material normalSprite;
     public Material hoverSprite;
     public Material pressedSprite;
+	private GameObject boardContainer;
+	private BoardWrapper boardWrapper;
+	private GameObject mainAudio;
+	private AudioSource mainAudioSource;
+	GameObject errorObject;
+	Text errorText;
+
+	void Awake() {
+		boardContainer = GameObject.FindGameObjectWithTag("Board");
+		boardWrapper = boardContainer.GetComponent<BoardWrapper>();
+		mainAudio = GameObject.FindGameObjectWithTag("Audio");
+		mainAudioSource = mainAudio.GetComponent<AudioSource>();
+		errorObject = GameObject.FindGameObjectWithTag("ErrorText");
+		errorText = errorObject.GetComponent<Text>();
+	}
     
     override
     public Material getNormalSprite() {
@@ -106,7 +122,11 @@ public class SubmitButton : _PressableButton {
 	}
 
 	void GameOver() {
-		dropPieces(); //Drop the pieces
+		//dropPieces(); //Drop the pieces
+		mainAudioSource.clip = Resources.Load ("Audio/Wrong") as AudioClip;
+		mainAudioSource.Play();
+		Board board = boardWrapper.getBoard();
+		errorText.text = board.getMostRecentError();
 		//play "Oh no! Sound effect"
 		//also maybe darken the screen a bit?
 		//Camera shake?

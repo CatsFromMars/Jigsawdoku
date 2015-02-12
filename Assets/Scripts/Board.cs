@@ -29,12 +29,12 @@ public class Board {
             
             if (checkRows != completeMask) {
 				mostRecentError = Mathf.Floor(Mathf.Log(checkRows^completeMask, 2));
-				playerError = "There's a goof up on row" + mostRecentError.ToString();
+				playerError = "Mistake on row " + mostRecentError.ToString() + "!";
                 return false;
             }
             if (checkCols != completeMask) {
 				mostRecentError = Mathf.Floor(Mathf.Log(checkCols^completeMask, 2));
-				playerError = "There's a goof up on column" + mostRecentError.ToString();
+				playerError = "Mistake on column " + mostRecentError.ToString() + "!";
                 return false;
             }
             
@@ -48,7 +48,7 @@ public class Board {
             
             if (checkBlks != completeMask) {
 				mostRecentError = Mathf.Floor(Mathf.Log(checkBlks^completeMask, 2));
-				playerError = "There's a goof up on block" + mostRecentError.ToString();
+				playerError = "Mistake on block " + mostRecentError.ToString() + "!";
                 return false;
             }
         }

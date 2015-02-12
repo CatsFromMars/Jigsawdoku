@@ -313,12 +313,20 @@ public class PieceWrapper : MonoBehaviour {
     }
     
     void rotateClockwise() {
+		//play audio
+		mainAudioSource.clip = Resources.Load("Audio/Rotate") as AudioClip;
+		mainAudioSource.Play();
+
 		rotateDelay = 20;
         targetRotation *= Quaternion.Euler(0, 0, -90);
         piece.rotateClockwise();
     }
     
     void rotateCounterClockwise() {
+		//play audio
+		mainAudioSource.clip = Resources.Load("Audio/Rotate") as AudioClip;
+		mainAudioSource.Play();
+
 		rotateDelay = 20;
         targetRotation *= Quaternion.Euler(0, 0, 90);
         piece.rotateCounterClockwise();
