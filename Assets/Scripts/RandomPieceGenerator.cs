@@ -12,12 +12,6 @@ class Square
 		public int col = 0;
 };
 
-//[System.Serializable]
-//public class ColorPair {
-//    public Color tileColor;
-//    public Color numberColor;
-//}
-
 public class RandomPieceGenerator : MonoBehaviour
 { 
 
@@ -29,11 +23,12 @@ public class RandomPieceGenerator : MonoBehaviour
 		int minPieceSize = 6;
 		List<int[,]> jigsawPieces = new List<int[,]> ();
 		ArrayList jigsawPiecesPlaceholder = new ArrayList ();
+		public Difficulty difficulty;
 
 		void Start ()
 		{
 				// get a random board from database;
-				int random = 0;
+				int random = UnityEngine.Random.Range (0, 100);
 				for (int i = 0; i < 9; i++) {
 						for (int j = 0; j < 9; j++) {
 								board [i, j] = new Square ();
@@ -44,11 +39,42 @@ public class RandomPieceGenerator : MonoBehaviour
 						}
 				}
 
-				GenerateRandomPieces ();
-				MakePieces (jigsawPieces);
+				switch (difficulty) {
+				case Difficulty.Easy:
+						minPieceSize = 6;
+						maxPieceSize = 9;
+						GenerateRandomPieces ();
+						MakePieces (jigsawPieces, 3, 5);
+						break;
+				case Difficulty.Normal:
+						minPieceSize = 4;
+						maxPieceSize = 8;
+						GenerateRandomPieces ();
+						MakePieces (jigsawPieces, 3, 4);
+						break;
+				case Difficulty.Hard:
+						minPieceSize = 3;
+						maxPieceSize = 7;
+						GenerateRandomPieces ();
+						MakePieces (jigsawPieces, 3, 3);
+						break;
+				case Difficulty.Lunatic:
+						minPieceSize = 3;
+						maxPieceSize = 6;
+						GenerateRandomPieces ();
+						MakePieces (jigsawPieces, 2, 2);
+						break;
+				default:
+						minPieceSize = 3;
+						maxPieceSize = 9;
+						GenerateRandomPieces ();
+						MakePieces (jigsawPieces, 3, 3);
+						break;
+				}
 
+		
 		}
-
+	
 		void GenerateRandomPieces ()
 		{
 				// pick x arbitrary starting points
@@ -239,13 +265,14 @@ public class RandomPieceGenerator : MonoBehaviour
 				}
 		}
 
-		public void MakePieces (List<int[,]> piecesList)
+		public void MakePieces (List<int[,]> piecesList, int minSize, int numHints)
 		{           
 				foreach (int[,] piece in piecesList) {
 						Piece p = new Piece (piece); 
 						jigsawPiecesPlaceholder.Add (p);
 				}
 				int counter = 0;
+				int hints = 0;
 				foreach (Piece p in jigsawPiecesPlaceholder) {
 						// Do not use random colors; they look bad. Instead, pull predetermined color pairs from an array.
 
@@ -259,7 +286,7 @@ public class RandomPieceGenerator : MonoBehaviour
 						}
 
 						int x = UnityEngine.Random.Range (7, 12);
-						int y = UnityEngine.Random.Range (5, 8);
+						int y = UnityEngine.Random.Range (0, 5);
 						if (UnityEngine.Random.value < 0.5) {
 								x *= -1;
 						}
@@ -267,12 +294,25 @@ public class RandomPieceGenerator : MonoBehaviour
 								y *= -1;
 						}
 
-						GameObject t = (GameObject)GameObject.Instantiate (piecePrefab);//, new Vector3(x, y, 0), Quaternion.identity);
+						GameObject t = (GameObject)GameObject.Instantiate (piecePrefab, new Vector3 (x, y, 0), Quaternion.identity);//, new Vector3(x, y, 0), Quaternion.identity);
 						PieceWrapper pieceWrapper = t.GetComponent<PieceWrapper> ();
 
-						pieceWrapper.SetData (p, numberColor, tileColor);
-						pieceWrapper.makeHint ();
+						
+						if (p.getNumTiles () < minSize) {
+								pieceWrapper.makeHint ();
+								hints++;
+						}
+				
+						for (int j = 0; j < 3; j++) {
+								if (UnityEngine.Random.value < 0.5) {
+										p.rotateClockwise ();
+								}
+						}
 
+			
+						pieceWrapper.SetData (p, numberColor, tileColor);
+						
+			
 						//No need to call awake/start (They are automatically called after this.)
 						counter++;
 				}
