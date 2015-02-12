@@ -100,8 +100,8 @@ public class VoronoiGenerator : MonoBehaviour {
             Color numberColor = Color.black;
             Color tileColor = Color.black;
 
-            int x = UnityEngine.Random.Range(7, 12);
-            int y = UnityEngine.Random.Range(5, 8);
+            float x = UnityEngine.Random.Range(7, 12);
+            float y = UnityEngine.Random.Range(0, 5);
             if (UnityEngine.Random.value < 0.5) {
                 x *= -1;
             }
