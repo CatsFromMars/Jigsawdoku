@@ -36,6 +36,6 @@ public class StartButton : _PressableButton {
 	
 	override
 	public void onButtonPressed() {
-		Application.LoadLevel("Game");
+		Application.LoadLevel("difficulty_select");
 	}
 }
