@@ -9,7 +9,7 @@ using System.Collections;
 }
 
 public enum Difficulty {
-    Easy, Normal, Hard, Lunatic, Extra
+    Easy, Normal, Hard, Lunatic, Extra, Sudoku_Easy, Sudoku_Hard
 }
 
 public class VoronoiGenerator : MonoBehaviour {
@@ -47,10 +47,16 @@ public class VoronoiGenerator : MonoBehaviour {
             generateVoronoiPieces(30, 0, 3);
             break;
         case Difficulty.Lunatic:
-            generateVoronoiPieces(40, 0, 2);
+            generateVoronoiPieces(30, 5, 2);
             break;
         case Difficulty.Extra:
             generateVoronoiPieces(40, 1, 0);
+            break;
+        case Difficulty.Sudoku_Easy:
+            generateVoronoiPieces(81, 30, 0);
+            break;
+        case Difficulty.Sudoku_Hard:
+            generateVoronoiPieces(81, 20, 0);
             break;
         }
 	}
