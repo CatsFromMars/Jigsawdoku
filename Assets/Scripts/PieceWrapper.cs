@@ -158,25 +158,34 @@ public class PieceWrapper : MonoBehaviour {
         }
     }
 
+	void DisplayIcons() {
+		//Spawn Rotation Icon
+		float top = (piece.getHeight()) - (piece.getHeight() / 3);
+		Vector2 offset = new Vector2(0, top);
+		Vector2 offset2 = new Vector2(0, top * -1);
+		Vector2 pos = new Vector2(transform.position.x, transform.position.y);
+		
+		//Display X
+		displayedRotationIconTop = Instantiate(rotIcon, pos + offset, Quaternion.identity) as GameObject;
+		//Display Z
+		displayedRotationIconBottom = Instantiate(rotIconBottom, pos + offset2, Quaternion.identity) as GameObject;
+		
+		//parent icon to piece
+		displayedRotationIconTop.transform.parent = this.gameObject.transform;
+		displayedRotationIconBottom.transform.parent = this.gameObject.transform;
+	}
+
+	void DestroyIcons() {
+		Destroy(displayedRotationIconTop);
+		Destroy(displayedRotationIconBottom);
+	}
+
     void OnMouseDown() {
         //Play audio
         mainAudioSource.clip = Resources.Load("Audio/PickupPiece") as AudioClip;
         mainAudioSource.Play();
 
-        //Spawn Rotation Icon
-        float top = (piece.getHeight()) - (piece.getHeight() / 3);
-        Vector2 offset = new Vector2(0, top);
-        Vector2 offset2 = new Vector2(0, top * -1);
-        Vector2 pos = new Vector2(transform.position.x, transform.position.y);
-
-        //Display X
-        //displayedRotationIconTop = Instantiate(rotIcon, pos + offset, Quaternion.identity) as GameObject;
-        //Display Z
-        //displayedRotationIconBottom = Instantiate(rotIconBottom, pos + offset2, Quaternion.identity) as GameObject;
-
-        //parent icon to piece
-        //displayedRotationIconTop.transform.parent = this.gameObject.transform;
-        //displayedRotationIconBottom.transform.parent = this.gameObject.transform;
+		DisplayIcons();
     }
 
     void OnMouseDrag() {
@@ -194,12 +203,9 @@ public class PieceWrapper : MonoBehaviour {
 
         if (mouseWheel > 0 && rotateDelay == 0) {
             rotateCounterClockwise();
-            rotateDelay = 20;
         } else if (mouseWheel < 0 && rotateDelay == 0) {
             rotateClockwise();
-            rotateDelay = 20;
         }
-
 
         handleInput();
 
@@ -207,6 +213,10 @@ public class PieceWrapper : MonoBehaviour {
         BackgroundController backgroundController = background.GetComponent<BackgroundController>();
 
         backgroundController.setColor(ColorUtils.lightenColor(backColor, 0.2f));
+
+		if(rotateDelay != 0) DestroyIcons();
+		else if(displayedRotationIconBottom == null && displayedRotationIconTop == null) DisplayIcons();
+
     }
 
     void OnMouseUp() {
@@ -258,10 +268,10 @@ public class PieceWrapper : MonoBehaviour {
 
     void handleInput() {
         // Placeholder controls
-        if (Input.GetKeyDown(KeyCode.Z)) {
+        if (Input.GetKeyDown(KeyCode.Z) && rotateDelay == 0) {
             rotateClockwise();
         }
-        if (Input.GetKeyDown(KeyCode.X)) {
+		if (Input.GetKeyDown(KeyCode.X) && rotateDelay == 0) {
             rotateCounterClockwise();
         }
     }
@@ -303,11 +313,13 @@ public class PieceWrapper : MonoBehaviour {
     }
     
     void rotateClockwise() {
+		rotateDelay = 20;
         targetRotation *= Quaternion.Euler(0, 0, -90);
         piece.rotateClockwise();
     }
     
     void rotateCounterClockwise() {
+		rotateDelay = 20;
         targetRotation *= Quaternion.Euler(0, 0, 90);
         piece.rotateCounterClockwise();
     }
