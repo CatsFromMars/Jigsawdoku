@@ -11,7 +11,6 @@ class Square {
     public int col = 0;
 };
 
-<<<<<<< HEAD
 public class RandomPieceGenerator : MonoBehaviour {
 
     public GameObject piecePrefab;
@@ -36,87 +35,19 @@ public class RandomPieceGenerator : MonoBehaviour {
                 board[i, j].col = j;
             }
         }
-=======
-public class RandomPieceGenerator : MonoBehaviour
-{
-
-        public GameObject piecePrefab;
-        public PuzzleDatabase database;
-        public ColorPair[] colorTable;
-        Square[,] board = new Square[9, 9];
-        int maxPieceSize = 9;
-        int minPieceSize = 6;
-        List<int[,]> jigsawPieces = new List<int[,]> ();
-        List<Piece> jigsawPiecesPlaceholder = new List<Piece> ();
-        public Difficulty difficulty;
-
-        void Start ()
-        {
-                // get a random board from database;
-                int random = UnityEngine.Random.Range (0, 100);
-                for (int i = 0; i < 9; i++) {
-                        for (int j = 0; j < 9; j++) {
-                                board [i, j] = new Square ();
-                                board [i, j].weight = 0;
-                                board [i, j].number = (int)Char.GetNumericValue (database.puzzle [random] [i * 9 + j]);
-                                board [i, j].row = i;
-                                board [i, j].col = j;
-                        }
-                }
-
-                switch (difficulty) {
-                case Difficulty.Easy:
-                        minPieceSize = 6;
-                        maxPieceSize = 9;
-                        GenerateRandomPieces ();
-                        MakePieces (jigsawPieces, 3, 8,2);
-                        break;
-                case Difficulty.Normal:
-                        minPieceSize = 3;
-                        maxPieceSize = 9;
-                        GenerateRandomPieces ();
-                        MakePieces (jigsawPieces, 3, 5,1);
-                        break;
-                case Difficulty.Hard:
-                        minPieceSize = 3;
-                        maxPieceSize = 7;
-                        GenerateRandomPieces ();
-                        MakePieces (jigsawPieces, 3, 3,0);
-                        break;
-                case Difficulty.Lunatic:
-                        minPieceSize = 3;
-                        maxPieceSize = 6;
-                        GenerateRandomPieces ();
-                        MakePieces (jigsawPieces, 2, 2,0);
-                        break;
-                case Difficulty.Extra:
-                        minPieceSize = 3;
-                        maxPieceSize = 6;
-                        GenerateRandomPieces ();
-                        MakePieces (jigsawPieces, 2, 0,0);
-                        break;
-                default:
-                        minPieceSize = 3;
-                        maxPieceSize = 9;
-                        GenerateRandomPieces ();
-                        MakePieces (jigsawPieces, 3, 3,0);
-                        break;
-                }
-
->>>>>>> 5607ffebe115b9e390440e3465880baf10c26879
 
         switch (difficulty) {
         case Difficulty.Easy:
             minPieceSize = 6;
             maxPieceSize = 16;
             GenerateRandomPieces();
-            MakePieces(jigsawPieces, 3, 30, 3);
+            MakePieces(jigsawPieces, 3, 30, 5);
             break;
         case Difficulty.Normal:
             minPieceSize = 5;
             maxPieceSize = 16;
             GenerateRandomPieces();
-            MakePieces(jigsawPieces, 3, 30, 5);
+            MakePieces(jigsawPieces, 3, 30, 2);
             break;
         case Difficulty.Hard:
             minPieceSize = 3;
