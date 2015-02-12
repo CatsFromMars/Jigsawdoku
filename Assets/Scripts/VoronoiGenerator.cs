@@ -137,13 +137,13 @@ public class VoronoiGenerator : MonoBehaviour {
         int minIndex = 0;
         int dx = col - pointLocations[0,1];
         int dy = row - pointLocations[0,0];
-        int dist = customDistance(dx, dy);
+        int dist = euclideanSquared(dx, dy);
         int minDist = dist;
 
         for (int i = 1; i < pointLocations.GetLength(0); i++) {
             dx = col - pointLocations[i,1];
             dy = row - pointLocations[i,0];
-            dist = customDistance(dx, dy);
+            dist = euclideanSquared(dx, dy);
 
             if (dist < minDist) {
                 minDist = dist;
