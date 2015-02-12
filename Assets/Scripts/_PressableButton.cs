@@ -17,6 +17,12 @@ public abstract class _PressableButton : MonoBehaviour {
     
     public abstract void onButtonPressed();
 
+	public enum colliderShape {
+		Circle, Square
+	}
+	
+	public colliderShape buttonShape;
+
     void Start () {
         quad = GameObject.CreatePrimitive(PrimitiveType.Quad);
 
@@ -28,8 +34,15 @@ public abstract class _PressableButton : MonoBehaviour {
 
         quad.renderer.material = getNormalSprite();
 
-        BoxCollider2D collider = gameObject.AddComponent<BoxCollider2D>();
-        collider.size = dim/(getScaleFactor()*1.1f);
+		if(buttonShape == colliderShape.Square) {
+	        BoxCollider2D collider = gameObject.AddComponent<BoxCollider2D>();
+	        collider.size = dim/(getScaleFactor()*1.1f);
+		}
+		else {
+			CircleCollider2D collider = gameObject.AddComponent<CircleCollider2D>();
+			collider.radius = 1.5f;
+		}
+
     }
     
     void OnMouseUpAsButton() {

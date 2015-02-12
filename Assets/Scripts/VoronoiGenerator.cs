@@ -3,7 +3,7 @@ using System.Collections;
 
 
 [System.Serializable]
-public class ColorPair {
+    public class ColorPair {
     public Color tileColor;
     public Color numberColor;
 }
