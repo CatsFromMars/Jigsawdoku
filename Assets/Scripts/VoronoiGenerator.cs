@@ -15,6 +15,7 @@ public class VoronoiGenerator : MonoBehaviour {
 
     public int numberOfPieces;
     public int numberOfHints;
+    public int minPieceSize;
     
     public ColorPair[] colorTable;
 
@@ -33,10 +34,10 @@ public class VoronoiGenerator : MonoBehaviour {
             }
         }
 
-        generateVoronoiPieces(numberOfPieces, numberOfHints);
+        generateVoronoiPieces(numberOfPieces, numberOfHints, minPieceSize);
 	}
 
-    private void generateVoronoiPieces(int numPoints, int numHints) {
+    private void generateVoronoiPieces(int numPoints, int numHints, int minSize) {
         if (numPoints <= 0 || numPoints > 81) {
             Debug.LogError("Invalid number of points");
         }
@@ -78,14 +79,8 @@ public class VoronoiGenerator : MonoBehaviour {
 
             Piece p = new Piece(untrimmedPiece);
 
-            Color numberColor = Color.black; // Default colors
+            Color numberColor = Color.black;
             Color tileColor = Color.black;
-            
-            if (colorTable.Length > 0) {
-                ColorPair colorPair = colorTable[i % colorTable.Length];
-                numberColor = colorPair.numberColor;
-                tileColor = colorPair.tileColor;
-            }
 
             int x = UnityEngine.Random.Range(7, 12);
             int y = UnityEngine.Random.Range(5, 8);
@@ -99,18 +94,24 @@ public class VoronoiGenerator : MonoBehaviour {
             GameObject t = (GameObject)GameObject.Instantiate(piecePrefab, new Vector3(x, y, 0), Quaternion.identity);
             PieceWrapper pieceWrapper = t.GetComponent<PieceWrapper>();
 
-            if (i < numHints) {
+            if (i < numHints || p.getNumTiles() < minSize) {
                 pieceWrapper.makeHint();
-                pieceWrapper.SetData(p, Color.black, Color.black);
             }
             else {
+                if (colorTable.Length > 0) {
+                    ColorPair colorPair = colorTable[i % colorTable.Length];
+                    numberColor = colorPair.numberColor;
+                    tileColor = colorPair.tileColor;
+                }
+
                 for (int j = 0; j < 3; j++) {
                     if (UnityEngine.Random.value < 0.5) {
                         p.rotateClockwise();
                     }
                 }
-                pieceWrapper.SetData(p, numberColor, tileColor);
             }
+
+            pieceWrapper.SetData(p, numberColor, tileColor);
         }
     }
 
