@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class StartButton : _PressableButton {
+public class QuitButton : _PressableButton {
 	
 	public Material normalSprite;
 	public Material hoverSprite;
@@ -36,6 +36,6 @@ public class StartButton : _PressableButton {
 	
 	override
 	public void onButtonPressed() {
-		Application.LoadLevel("main_game");
+		Application.Quit();
 	}
 }

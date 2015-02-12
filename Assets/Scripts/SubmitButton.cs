@@ -78,10 +78,31 @@ public class SubmitButton : _PressableButton {
     }
     */
 	void WinnerIsYou() {
-		Instantiate(Resources.Load ("CelebrationStars"), transform.position, Quaternion.identity);
+		StartCoroutine(PieceConfetti());
+		//Instantiate(Resources.Load ("CelebrationStars"), transform.position, Quaternion.identity);
+
 		//play "you win!" sting
 		//display "you win! text"
 		//bigText.text = "Bingo Tiger!";
+	}
+
+	IEnumerator PieceConfetti() {
+
+		GameObject[] pieces = GameObject.FindGameObjectsWithTag("Piece");
+		for(int i = 0; i < pieces.Length; i++) {
+			GameObject bit = pieces[i];
+			PieceWrapper wrapper = bit.GetComponent<PieceWrapper>();
+			Color pieceColor = wrapper.backColor;
+			pieceColor.a = 255;
+			Destroy(bit.gameObject);
+			GameObject confetti = Resources.Load("Confetti") as GameObject;
+			ParticleSystem confettiParticles = confetti.GetComponent<ParticleSystem>();
+			confettiParticles.startColor = pieceColor;
+			Instantiate(confetti, bit.transform.position, Quaternion.Euler(-90,0,0));
+			yield return new WaitForSeconds(0.3f);
+			yield return 0;
+		}
+
 	}
 
 	void GameOver() {

@@ -78,7 +78,7 @@ public class RandomPieceGenerator : MonoBehaviour {
 
         // now if counter < 81, we loop through all squares again and run generatepiece
 
-        if (counter < 81) {
+        if (counter < 81) { //I MADE A CHANGE HERE! BEWARB!
             for (int row = 0; row < 9; row++) {
                 for (int col = 0; col <9; col++) {
                     if (board[row, col].weight == 0) {
