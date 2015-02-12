@@ -22,7 +22,7 @@ public class RandomPieceGenerator : MonoBehaviour
         int maxPieceSize = 9;
         int minPieceSize = 6;
         List<int[,]> jigsawPieces = new List<int[,]> ();
-        ArrayList jigsawPiecesPlaceholder = new ArrayList ();
+        List<Piece> jigsawPiecesPlaceholder = new List<Piece> ();
         public Difficulty difficulty;
 
         void Start ()
@@ -44,31 +44,31 @@ public class RandomPieceGenerator : MonoBehaviour
                         minPieceSize = 6;
                         maxPieceSize = 9;
                         GenerateRandomPieces ();
-                        MakePieces (jigsawPieces, 3, 7);
+                        MakePieces (jigsawPieces, 3, 8,2);
                         break;
                 case Difficulty.Normal:
                         minPieceSize = 3;
                         maxPieceSize = 9;
                         GenerateRandomPieces ();
-                        MakePieces (jigsawPieces, 3, 5);
+                        MakePieces (jigsawPieces, 3, 5,1);
                         break;
                 case Difficulty.Hard:
                         minPieceSize = 3;
                         maxPieceSize = 7;
                         GenerateRandomPieces ();
-                        MakePieces (jigsawPieces, 3, 3);
+                        MakePieces (jigsawPieces, 3, 3,0);
                         break;
                 case Difficulty.Lunatic:
                         minPieceSize = 3;
                         maxPieceSize = 6;
                         GenerateRandomPieces ();
-                        MakePieces (jigsawPieces, 2, 2);
+                        MakePieces (jigsawPieces, 2, 2,0);
                         break;
                 default:
                         minPieceSize = 3;
                         maxPieceSize = 9;
                         GenerateRandomPieces ();
-                        MakePieces (jigsawPieces, 3, 3);
+                        MakePieces (jigsawPieces, 3, 3,0);
                         break;
                 }
 
@@ -265,20 +265,66 @@ public class RandomPieceGenerator : MonoBehaviour
                 }
         }
 
-        public void MakePieces (List<int[,]> piecesList, int minSize, int numHints)
+        public void MakePieces (List<int[,]> piecesList, int minSize, int numHints, int numLargeHints)
         {
                 foreach (int[,] piece in piecesList) {
                         Piece p = new Piece (piece);
                         jigsawPiecesPlaceholder.Add (p);
                 }
+
                 int counter = 0;
-                int hints = 0;
 
                 // sort jigsawPiecesPlaceHolder according to number of tiles in pieces. 
-                List<Piece> sortedPieces = new List<Piece> ();
-               
+                Piece[] sortedPieces = new Piece[jigsawPiecesPlaceholder.Count];
+                Piece current_p;
 
                 foreach (Piece p in jigsawPiecesPlaceholder) {
+                        int placeIndex = -1;
+                        bool move = false;
+                        for (int i = 0; i < sortedPieces.Length; i++) {
+                                current_p = sortedPieces [i];
+
+                                if (current_p != null) {
+                                        if (p.getNumTiles () < current_p.getNumTiles ()) { 
+                                                // once we find a larger piece, we stop and break
+                                                placeIndex = i;
+                                                move = true;
+                                                break;
+                                        } else if (p.getNumTiles () >= current_p.getNumTiles ()) { 
+                                                // continue till we find a larger piece
+                                                continue;
+                                        }
+                                } else { // it reaches here if p is equal to sortedPieces[i-1] and sortedPieces[i] is null
+                                        placeIndex = i;
+                                        move = false;
+                                        break;
+                                }
+                        }
+                        // now place p at placeIndex in sortedPieces and move other pieces in array up if we need to
+                        if (move) {
+                                for (int i = sortedPieces.Length-1; i >= placeIndex; i--) {
+                                        if (sortedPieces [i] == null) { 
+                                                // only move actual pieces forward
+                                                continue;
+                                        } else if (i > placeIndex) {
+                                                sortedPieces [i + 1] = sortedPieces [i];
+                                                sortedPieces[i] = null;
+                                        } else if (i == placeIndex) {
+                        sortedPieces [i + 1] = sortedPieces [i];
+                        sortedPieces [i] = p;
+                                        } else
+                                                break;
+                                }
+                        } else {
+                              
+                                sortedPieces [placeIndex] = p;
+                        }
+                }
+        
+                int hints = 0;
+                int smallHints = 0;
+                int largeHints = 0;
+                foreach (Piece p in sortedPieces) {
                         // Do not use random colors; they look bad. Instead, pull predetermined color pairs from an array.
 
                         Color numberColor = Color.black; // Default colors
@@ -299,10 +345,17 @@ public class RandomPieceGenerator : MonoBehaviour
                         PieceWrapper pieceWrapper = t.GetComponent<PieceWrapper> ();
 
 
-                        if (p.getNumTiles () < minSize) {
+                        if (p.getNumTiles () < minSize ) {
+                          
                                 pieceWrapper.makeHint ();
                                 hints++;
-                        } else   if (colorTable.Length > 0) {
+                                smallHints ++;
+                        } 
+                        else if (hints < numHints && largeHints <= numLargeHints) {
+                                pieceWrapper.makeHint ();
+                                hints++; 
+                                largeHints ++;
+                        }else if (colorTable.Length > 0) {
                                 ColorPair colorPair = colorTable [counter % colorTable.Length];
                                 numberColor = colorPair.numberColor;
                                 tileColor = colorPair.tileColor;
