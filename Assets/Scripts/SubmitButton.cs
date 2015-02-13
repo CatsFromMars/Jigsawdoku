@@ -21,7 +21,7 @@ public class SubmitButton : _PressableButton {
 		mainAudio = GameObject.FindGameObjectWithTag("Audio");
 		mainAudioSource = mainAudio.GetComponent<AudioSource>();
 		errorObject = GameObject.FindGameObjectWithTag("ErrorText");
-		errorText = errorObject.GetComponent<Text>();
+		//errorText = errorObject.GetComponent<Text>();
 	}
     
     override
@@ -93,10 +93,31 @@ public class SubmitButton : _PressableButton {
         }
     }
     */
-	void WinnerIsYou() {
+
+    void WinnerIsYou() {
+		mainAudioSource.clip = Resources.Load ("Audio/Yay") as AudioClip;
+		mainAudioSource.Play();
+
 		StartCoroutine(PieceConfetti());
 		Instantiate(Resources.Load ("Waytogo") as GameObject, new Vector3(23,0,-5), Quaternion.identity);
-		errorText.text = "";
+		//errorText.text = "";
+
+		GameObject timerContainer = GameObject.FindGameObjectWithTag("timer");
+        Timer timer = timerContainer.GetComponentInChildren<Timer>();
+
+        StartCoroutine(PieceConfetti());
+
+		timer.gameOver=true;
+
+		//SET PLAYER HIGH SCORE IN DIFFICULTY
+		PlayerPrefs.SetInt(Application.loadedLevelName, timer.score);
+		PlayerPrefs.Save();
+
+		//Instantiate(Resources.Load ("CelebrationStars"), transform.position, Quaternion.identity);
+
+		//play "you win!" sting
+		//display "you win! text"
+		//bigText.text = "Bingo Tiger!";
 	}
 
 	IEnumerator PieceConfetti() {
@@ -116,19 +137,18 @@ public class SubmitButton : _PressableButton {
 			yield return 0;
 		}
 
+		//WHEN THIS COROUTINE IS OVER, RESTART THE GAME!
+		yield return new WaitForSeconds(0.5f);
+		Application.LoadLevel(Application.loadedLevel);
+
 	}
 
 	void GameOver() {
 		//dropPieces(); //Drop the pieces
 		mainAudioSource.clip = Resources.Load ("Audio/Wrong") as AudioClip;
 		mainAudioSource.Play();
-		Board board = boardWrapper.getBoard();
-		errorText.text = board.getMostRecentError();
-		//play "Oh no! Sound effect"
-		//also maybe darken the screen a bit?
-		//Camera shake?
-		//Display Text
-		//bigText.text = "Not quite right...";
+		//Board board = boardWrapper.getBoard();
+		//errorText.text = board.getMostRecentError();
 	}
 
 	void dropPieces() {

@@ -11,6 +11,16 @@ public class BoardWrapper : MonoBehaviour {
     private GameObject quad;
     private GameObject overlayQuad;
 
+    private int colorIndex;
+    private Color[] colorCycle = {
+        0.7f * Color.red,
+        0.7f * Color.yellow,
+        0.7f * Color.green,
+        0.7f * Color.cyan,
+        0.7f * Color.blue,
+        0.7f * Color.magenta
+    };
+
 	void Start () {
         board = new Board();
 
@@ -27,25 +37,46 @@ public class BoardWrapper : MonoBehaviour {
         overlayQuad.transform.localScale = new Vector3(10, 10, 1);
 
         quad.renderer.material = boardSprite;
-        quad.renderer.material.color = boardColor;
+        quad.renderer.material.color = Color.black;
 
         overlayQuad.renderer.material = overlaySprite;
-        overlayQuad.renderer.material.color = Color.black * 0.7f;
+        //overlayQuad.renderer.material.color = Color.black * 0.8f;
         
         Destroy(quad.GetComponent<MeshCollider>());
         Destroy(overlayQuad.GetComponent<MeshCollider>());
-
+        /*
         GameObject[] pieces = GameObject.FindGameObjectsWithTag("Piece");
         board.setPieces(pieces);
-
+        */
+        StartCoroutine(cycleColors());
 	}
+
+    IEnumerator cycleColors() {
+        while (true) {
+            colorIndex = (colorIndex + 1) % colorCycle.Length;
+
+            StartCoroutine(updateOverlayColor());
+
+            yield return new WaitForSeconds(1);
+        }
+    }
+
+    IEnumerator updateOverlayColor() {
+        float i = 0;
+        while (i < 1) {
+            i += Time.deltaTime;
+            overlayQuad.renderer.material.color = Color.Lerp(colorCycle[colorIndex], colorCycle[(colorIndex + 1) % colorCycle.Length], i);
+
+            yield return null;
+        }
+    }
 
     public Board getBoard() {
         return board;
     }
 
     public void showOverlay() {
-        overlayQuad.renderer.material.color = Color.black * 0.7f;
+        //overlayQuad.renderer.material.color = Color.black * 0.8f;
     }
 
     public void hideOverlay() {
