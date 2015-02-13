@@ -44,10 +44,10 @@ public class BoardWrapper : MonoBehaviour {
         
         Destroy(quad.GetComponent<MeshCollider>());
         Destroy(overlayQuad.GetComponent<MeshCollider>());
-
+        /*
         GameObject[] pieces = GameObject.FindGameObjectsWithTag("Piece");
         board.setPieces(pieces);
-
+        */
         StartCoroutine(cycleColors());
 	}
 

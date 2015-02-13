@@ -108,6 +108,8 @@ public class Board {
     }
 
     private void addSnappedPiecesToBoard() {
+        pieceContainers = GameObject.FindGameObjectsWithTag("Piece");
+
         foreach (GameObject obj in pieceContainers) {
             PieceWrapper pieceWrapper = obj.GetComponent<PieceWrapper>();
 
@@ -137,9 +139,11 @@ public class Board {
         }
     }
 
+    /*
     public void setPieces(GameObject[] pieces) {
         pieceContainers = pieces;
     }
+    */
 
     // Not used anymore, but may be useful for debugging
     override
