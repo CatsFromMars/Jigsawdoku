@@ -3,6 +3,8 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class SubmitButton : _PressableButton {
+	public int width = 768;
+	public int height = 246;
     public Material normalSprite;
     public Material hoverSprite;
     public Material pressedSprite;
@@ -24,13 +26,11 @@ public class SubmitButton : _PressableButton {
     
     override
     public Material getNormalSprite() {
-		transform.rotation = Quaternion.identity;
         return normalSprite;
     }
     
     override
     public Material getHoverSprite() {
-		transform.Rotate (Vector3.forward * -90 * Time.deltaTime * 5);
         return hoverSprite;
     }
     
@@ -41,7 +41,7 @@ public class SubmitButton : _PressableButton {
     
     override
     public Vector2 getDimensions() {
-        return new Vector2(256, 256);
+        return new Vector2(width, height);
     }
     
     override
@@ -95,11 +95,8 @@ public class SubmitButton : _PressableButton {
     */
 	void WinnerIsYou() {
 		StartCoroutine(PieceConfetti());
-		//Instantiate(Resources.Load ("CelebrationStars"), transform.position, Quaternion.identity);
-
-		//play "you win!" sting
-		//display "you win! text"
-		//bigText.text = "Bingo Tiger!";
+		Instantiate(Resources.Load ("Waytogo") as GameObject, new Vector3(23,0,-5), Quaternion.identity);
+		errorText.text = "";
 	}
 
 	IEnumerator PieceConfetti() {
