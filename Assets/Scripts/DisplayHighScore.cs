@@ -20,6 +20,22 @@ public class DisplayHighScore : MonoBehaviour {
 			score = PlayerPrefs.GetInt("EasyGame",0);  
 			text.text = "Easy: "+score.ToString();
 		}
+		else if(level == difficulty.Normal) {
+			score = PlayerPrefs.GetInt("NormalGame",0);  
+			text.text = "Normal: "+score.ToString();
+		}
+		else if(level == difficulty.Hard) {
+			score = PlayerPrefs.GetInt("HardGame",0);  
+			text.text = "Hard: "+score.ToString();
+		}
+		else if(level == difficulty.Lunatic) {
+			score = PlayerPrefs.GetInt("LunaticGame",0);  
+			text.text = "Lunatic: "+score.ToString();
+		}
+		else if(level == difficulty.Extra) {
+			score = PlayerPrefs.GetInt("ExtraGame",0);  
+			text.text = "Extra: "+score.ToString();
+		}
 
 	}
 

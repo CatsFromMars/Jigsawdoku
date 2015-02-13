@@ -110,8 +110,10 @@ public class SubmitButton : _PressableButton {
 		timer.gameOver=true;
 
 		//SET PLAYER HIGH SCORE IN DIFFICULTY
-		PlayerPrefs.SetInt(Application.loadedLevelName, timer.score);
-		PlayerPrefs.Save();
+		if(timer.score > PlayerPrefs.GetInt(Application.loadedLevelName)) {
+			PlayerPrefs.SetInt(Application.loadedLevelName, timer.score);
+			PlayerPrefs.Save();
+		}
 
 		//Instantiate(Resources.Load ("CelebrationStars"), transform.position, Quaternion.identity);
 
