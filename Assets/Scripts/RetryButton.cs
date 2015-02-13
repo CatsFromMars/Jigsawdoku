@@ -37,6 +37,22 @@ public class RetryButton : _PressableButton {
     
     override
     public void onButtonPressed() {
-        Application.LoadLevel(Application.loadedLevel);
+        GameObject[] pieces = GameObject.FindGameObjectsWithTag("Piece");
+
+        foreach (GameObject piece in pieces) {
+            PieceWrapper pieceWrapper = piece.GetComponent<PieceWrapper>();
+            if (!pieceWrapper.isHint()) {
+                int x = UnityEngine.Random.Range(7, 12);
+                int y = UnityEngine.Random.Range(0, 5);
+                if (UnityEngine.Random.value < 0.5) {
+                    x *= -1;
+                }
+                if (UnityEngine.Random.value < 0.5) {
+                    y *= -1;
+                }
+
+                piece.transform.position = new Vector3(x, y, 0);
+            }
+        }
     }
 }

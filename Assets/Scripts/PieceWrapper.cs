@@ -346,6 +346,10 @@ public class PieceWrapper : MonoBehaviour {
     public bool isSnapped() {
         return snapped;
     }
+
+    public bool isHint() {
+        return hint;
+    }
     
     public void SetData(Piece p, Color c1, Color c2) {
         piece = p;
