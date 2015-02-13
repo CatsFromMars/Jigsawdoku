@@ -22,7 +22,7 @@ public class DifficultySelect : MonoBehaviour
 
         public void InsaneMode ()
         {
-                Application.LoadLevel ("InsaneGame");
+                Application.LoadLevel ("LunaticGame");
         }
 
         public void ExtraMode ()

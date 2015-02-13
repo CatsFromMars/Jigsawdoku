@@ -54,7 +54,7 @@ public class DifficultyButton : _PressableButton {
                         Application.LoadLevel ("HardGame");
                         break;
                 case Difficulty.Lunatic:
-                        Application.LoadLevel ("LunaticGame");
+                        Application.LoadLevel ("A");
                         break;
                 case Difficulty.Extra:
                         Application.LoadLevel ("ExtraGame");
