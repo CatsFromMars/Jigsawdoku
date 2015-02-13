@@ -59,13 +59,13 @@ public class RandomPieceGenerator : MonoBehaviour {
             minPieceSize = 2;
             maxPieceSize = 4;
             GenerateRandomPieces();
-            MakePieces(jigsawPieces, 1, 30, 10);
+            MakePieces(jigsawPieces, 0, 10, 12);
             break;
         case Difficulty.Extra:
             minPieceSize = 1;
             maxPieceSize = 4;
             GenerateRandomPieces();
-            MakePieces(jigsawPieces, 0, 30, 15);
+            MakePieces(jigsawPieces, 0, 10, 8);
             break;
         default:
             minPieceSize = 3;
