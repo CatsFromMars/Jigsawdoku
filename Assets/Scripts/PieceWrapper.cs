@@ -186,6 +186,8 @@ public class PieceWrapper : MonoBehaviour {
         mainAudioSource.Play();
 
 		DisplayIcons();
+
+        boardWrapper.destroyErrors();
     }
 
     void OnMouseDrag() {
@@ -220,7 +222,6 @@ public class PieceWrapper : MonoBehaviour {
     }
 
     void OnMouseUp() {
-
         snapPiece();
 
         if (snapped) {
@@ -241,6 +242,8 @@ public class PieceWrapper : MonoBehaviour {
         //Destroy rotation icon
         Destroy(displayedRotationIconTop);
         Destroy(displayedRotationIconBottom);
+
+        boardWrapper.updateErrors();
     }
 
     void OnMouseEnter() {
