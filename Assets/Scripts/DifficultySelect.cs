@@ -1,10 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class DifficultySelect : MonoBehaviour
 {
+		//DIFFICULTY UNLOCK
+		public bool hardUnlocked = false;
+		public bool lunaticUnlocked = false;
+		public bool extraUnlocked = false;
 
-       
+		//BUTTONS
+		public GameObject hard;
+		public GameObject lunatic;
+		public GameObject extra;
+	       
         public void EasyMode ()
         {
                 Application.LoadLevel ("EasyGame");
@@ -17,19 +26,25 @@ public class DifficultySelect : MonoBehaviour
 
         public void HardMode ()
         {
-                Application.LoadLevel ("HardGame");
-        }
+			
+			Application.LoadLevel ("HardGame");
+		}
 
         public void InsaneMode ()
         {
-                Application.LoadLevel ("LunaticGame");
+        	if(lunaticUnlocked) Application.LoadLevel ("LunaticGame");
         }
 
         public void ExtraMode ()
         {
-                Application.LoadLevel ("ExtraGame");
+             if(extraUnlocked)	Application.LoadLevel ("ExtraGame");
         }
 
+		void Awake() {
+			if(hardUnlocked) {
+			hard.GetComponent<Button>().interactable = true;
+		}
 
+		}
 
 }
