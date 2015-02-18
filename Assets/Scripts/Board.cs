@@ -5,8 +5,6 @@ using System.Collections.Generic;
 public class Board {
     private int[,] boardNumbers;
     private GameObject[] pieceContainers;
-	private float mostRecentError = 0;
-	private string playerError = "";
 
     public Board() {
         boardNumbers = new int[9, 9];
@@ -28,13 +26,9 @@ public class Board {
             }
             
             if (checkRows != completeMask) {
-				mostRecentError = Mathf.Floor(Mathf.Log(checkRows^completeMask, 2));
-				playerError = "Mistake on row " + mostRecentError.ToString() + "!";
                 return false;
             }
             if (checkCols != completeMask) {
-				mostRecentError = Mathf.Floor(Mathf.Log(checkCols^completeMask, 2));
-				playerError = "Mistake on column " + mostRecentError.ToString() + "!";
                 return false;
             }
             
@@ -47,18 +41,111 @@ public class Board {
             }
             
             if (checkBlks != completeMask) {
-				mostRecentError = Mathf.Floor(Mathf.Log(checkBlks^completeMask, 2));
-				playerError = "Mistake on block " + mostRecentError.ToString() + "!";
                 return false;
             }
         }
         
         return true;
     }
+    
+    public bool[,] getConflicts() {
+        bool[,] conflicts = new bool[9, 9];
+        
+        resetBoard();
+        addSnappedPiecesToBoard();
 
-	public string getMostRecentError() {
-		return playerError;
-	}
+        for (int i = 0; i < 9; i++) {
+            int rowConflicts = 0;
+            int colConflicts = 0;
+            int blkConflicts = 0;
+
+            for (int j = 0; j < 9; j++) {
+                int oldRowConflicts = rowConflicts;
+                int oldColConflicts = colConflicts;
+
+                if (boardNumbers[i,j] != 0) {
+                    rowConflicts |= 1 << boardNumbers[i,j];
+                    if (oldRowConflicts == rowConflicts) {
+                        conflicts[i,j] = true;
+                    }
+                }
+
+                if (boardNumbers[j,i] != 0) {
+                    colConflicts |= 1 << boardNumbers[j,i];
+                    if (oldColConflicts == colConflicts) {
+                        conflicts[j,i] = true;
+                    }
+                }
+            }
+
+            rowConflicts = 0;
+            colConflicts = 0;
+            for (int j = 8; j >= 0; j--) {
+                int oldRowConflicts = rowConflicts;
+                int oldColConflicts = colConflicts;
+                
+                if (boardNumbers[i,j] != 0) {
+                    rowConflicts |= 1 << boardNumbers[i,j];
+                    if (oldRowConflicts == rowConflicts) {
+                        conflicts[i,j] = true;
+                    }
+                }
+                
+                if (boardNumbers[j,i] != 0) {
+                    colConflicts |= 1 << boardNumbers[j,i];
+                    if (oldColConflicts == colConflicts) {
+                        conflicts[j,i] = true;
+                    }
+                }
+            }
+            
+            int blockRow = i/3;
+            int blockCol = i%3;
+
+            for (int j = 0; j < 3; j++) {
+                for (int k = 0; k < 3; k++) {
+                    int oldBlkConflicts = blkConflicts;
+
+                    if (boardNumbers[3*blockRow + j, 3*blockCol + k] != 0) {
+                        blkConflicts |= 1 << boardNumbers[3*blockRow + j, 3*blockCol + k];
+                        if (oldBlkConflicts == blkConflicts) {
+                            conflicts[3*blockRow + j, 3*blockCol + k] = true;
+                        }
+                    }
+                }
+            }
+
+            blkConflicts = 0;
+            for (int j = 2; j >= 0; j--) {
+                for (int k = 2; k >= 0; k--) {
+                    int oldBlkConflicts = blkConflicts;
+                    
+                    if (boardNumbers[3*blockRow + j, 3*blockCol + k] != 0) {
+                        blkConflicts |= 1 << boardNumbers[3*blockRow + j, 3*blockCol + k];
+                        if (oldBlkConflicts == blkConflicts) {
+                            conflicts[3*blockRow + j, 3*blockCol + k] = true;
+                        }
+                    }
+                }
+            }
+        }
+        
+        string debug = "";
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                if(conflicts[i,j]) {
+                    debug += "1";
+                }
+                else {
+                    debug += "_";
+                }
+            }
+            debug += "\n";
+        }
+        Debug.Log(debug);
+
+        return conflicts;
+    }
 
     private void updateBoardInts() {
         resetBoard();
@@ -138,12 +225,6 @@ public class Board {
             }
         }
     }
-
-    /*
-    public void setPieces(GameObject[] pieces) {
-        pieceContainers = pieces;
-    }
-    */
 
     // Not used anymore, but may be useful for debugging
     override

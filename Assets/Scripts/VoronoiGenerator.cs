@@ -47,10 +47,10 @@ public class VoronoiGenerator : MonoBehaviour {
             generateVoronoiPieces(30, 0, 3);
             break;
         case Difficulty.Lunatic:
-            generateVoronoiPieces(30, 5, 2);
+            generateVoronoiPieces(40, 4, 2);
             break;
         case Difficulty.Extra:
-            generateVoronoiPieces(40, 1, 0);
+            generateVoronoiPieces(54, 8, 0);
             break;
         case Difficulty.Sudoku_Easy:
             generateVoronoiPieces(81, 30, 0);

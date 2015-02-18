@@ -11,6 +11,8 @@ public class BoardWrapper : MonoBehaviour {
     private GameObject quad;
     private GameObject overlayQuad;
 
+    private GameObject errorPrefab;
+
     private int colorIndex;
     private Color[] colorCycle = {
         0.7f * Color.red,
@@ -40,14 +42,12 @@ public class BoardWrapper : MonoBehaviour {
         quad.renderer.material.color = Color.black;
 
         overlayQuad.renderer.material = overlaySprite;
-        //overlayQuad.renderer.material.color = Color.black * 0.8f;
         
         Destroy(quad.GetComponent<MeshCollider>());
         Destroy(overlayQuad.GetComponent<MeshCollider>());
-        /*
-        GameObject[] pieces = GameObject.FindGameObjectsWithTag("Piece");
-        board.setPieces(pieces);
-        */
+
+        errorPrefab = (GameObject) Resources.Load("ErrorPrefab");
+
         StartCoroutine(cycleColors());
 	}
 
@@ -71,15 +71,27 @@ public class BoardWrapper : MonoBehaviour {
         }
     }
 
+    public void updateErrors() {
+        destroyErrors();
+
+        bool[,] conflicts = board.getConflicts();
+
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                if (conflicts[i,j]) {
+                    GameObject.Instantiate(errorPrefab, new Vector3(j-4, 4-i, 0.9f), Quaternion.identity);
+                }
+            }
+        }
+    }
+
+    public void destroyErrors() {
+        foreach (GameObject error in GameObject.FindGameObjectsWithTag("Error")) {
+            Destroy(error);
+        }
+    }
+
     public Board getBoard() {
         return board;
-    }
-
-    public void showOverlay() {
-        //overlayQuad.renderer.material.color = Color.black * 0.8f;
-    }
-
-    public void hideOverlay() {
-        overlayQuad.renderer.material.color = Color.clear;
     }
 }
