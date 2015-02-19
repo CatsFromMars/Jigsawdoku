@@ -12,6 +12,7 @@ public class SubmitButton : _PressableButton {
 	private BoardWrapper boardWrapper;
 	private GameObject mainAudio;
 	private AudioSource mainAudioSource;
+	private GameObject levelSystem; 
 	GameObject errorObject;
 	Text errorText;
 
@@ -21,6 +22,7 @@ public class SubmitButton : _PressableButton {
 		mainAudio = GameObject.FindGameObjectWithTag("Audio");
 		mainAudioSource = mainAudio.GetComponent<AudioSource>();
 		errorObject = GameObject.FindGameObjectWithTag("ErrorText");
+		levelSystem = GameObject.FindGameObjectWithTag ("Level");
 		//errorText = errorObject.GetComponent<Text>();
 	}
     
@@ -57,6 +59,7 @@ public class SubmitButton : _PressableButton {
         if (!board.isComplete()) {
             GameOver();
         } else {
+
             WinnerIsYou();
         }
     }
@@ -115,6 +118,8 @@ public class SubmitButton : _PressableButton {
 			PlayerPrefs.Save();
 		}
 
+
+
 		//Instantiate(Resources.Load ("CelebrationStars"), transform.position, Quaternion.identity);
 
 		//play "you win!" sting
@@ -140,7 +145,7 @@ public class SubmitButton : _PressableButton {
 		}
 
 		//WHEN THIS COROUTINE IS OVER, RESTART THE GAME!
-		yield return new WaitForSeconds(0.5f);
+		yield return new WaitForSeconds(2.0f);
 		Application.LoadLevel(Application.loadedLevel);
 
 	}
