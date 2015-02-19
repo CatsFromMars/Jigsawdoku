@@ -34,7 +34,7 @@ public class LevelUp : MonoBehaviour
 				}
 				
 				experienceBar.value = (currentExp * 1.0f) / (maxExp * 1.0f);
-				level.text = "Level " + currentLevel.ToString ();
+				level.text = "lv " + currentLevel.ToString ();
 
 		Debug.Log ("experience : " + PlayerPrefs.GetInt("Experience"));
 		}

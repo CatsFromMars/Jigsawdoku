@@ -79,6 +79,13 @@ public class Timer : MonoBehaviour
 			}
 			text.text="Base score: "+baseScore+"\nTime Bonus: "+(score-baseScore)+"\nTotal: "+score;
 
+			// add score to highscore if need be
+			if(score > PlayerPrefs.GetInt(Application.loadedLevelName)) {
+				PlayerPrefs.SetInt(Application.loadedLevelName, score);
+				PlayerPrefs.Save();
+			}
+
+			// add exp to player's level
 			levelSystem.GetComponent<LevelUp> ().addExp (score);
 		}
 	}
