@@ -12,7 +12,6 @@ public class SubmitButton : _PressableButton {
 	private BoardWrapper boardWrapper;
 	private GameObject mainAudio;
 	private AudioSource mainAudioSource;
-	private GameObject levelSystem; 
 	GameObject errorObject;
 	Text errorText;
 
@@ -22,7 +21,6 @@ public class SubmitButton : _PressableButton {
 		mainAudio = GameObject.FindGameObjectWithTag("Audio");
 		mainAudioSource = mainAudio.GetComponent<AudioSource>();
 		errorObject = GameObject.FindGameObjectWithTag("ErrorText");
-		levelSystem = GameObject.FindGameObjectWithTag ("Level");
 		//errorText = errorObject.GetComponent<Text>();
 	}
     
