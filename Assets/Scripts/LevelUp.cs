@@ -36,7 +36,7 @@ public class LevelUp : MonoBehaviour
 				experienceBar.value = (currentExp * 1.0f) / (maxExp * 1.0f);
 				level.text = "lv " + currentLevel.ToString ();
 
-		Debug.Log ("experience : " + PlayerPrefs.GetInt("Experience"));
+
 		}
 	
 		// Update is called once per frame
@@ -78,7 +78,7 @@ public class LevelUp : MonoBehaviour
 				PlayerPrefs.Save ();
 				// now just need to check 
 				experienceBar.value = (currentExp * 1.0f) / (maxExp * 1.0f);
-		level.text = "Level " + currentLevel.ToString ();
+		level.text = "Lv " + currentLevel.ToString ();
 	}
 
 
