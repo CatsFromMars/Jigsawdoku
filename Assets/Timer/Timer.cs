@@ -15,10 +15,14 @@ public class Timer : MonoBehaviour
 	public bool gameOver;
 	public Difficulty difficulty;
 
+	
+	private GameObject levelSystem; 
 	Text text;
 
 	void Start (){
 		text = GetComponent <Text> ();
+		
+		levelSystem = GameObject.FindGameObjectWithTag ("Level");
 		curTime = 0;
 		switch (difficulty) {
 		case Difficulty.Easy:
@@ -74,6 +78,8 @@ public class Timer : MonoBehaviour
 				}
 			}
 			text.text="Base score: "+baseScore+"\nTime Bonus: "+(score-baseScore)+"\nTotal: "+score;
+
+			levelSystem.GetComponent<LevelUp> ().addExp (score);
 		}
 	}
 }
