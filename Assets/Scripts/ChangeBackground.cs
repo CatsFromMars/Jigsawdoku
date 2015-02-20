@@ -27,19 +27,19 @@ public class ChangeBackground : MonoBehaviour
 				if (PlayerPrefs.GetInt ("Level") > 2) {
 						background1.GetComponent<Button> ().interactable = true;
 				}
-				if (PlayerPrefs.GetInt ("Level") > 5) {
+				if (PlayerPrefs.GetInt ("Level") > 2) {
 						background2.GetComponent<Button> ().interactable = true;
 				}
 		
-				if (PlayerPrefs.GetInt ("Level") > 8) {
+				if (PlayerPrefs.GetInt ("Level") > 2) {
 						background3.GetComponent<Button> ().interactable = true;
 				}
 
-				if (PlayerPrefs.GetInt ("Level") > 11) {
+				if (PlayerPrefs.GetInt ("Level") > 2) {
 						background4.GetComponent<Button> ().interactable = true;
 				}
 
-				if (PlayerPrefs.GetInt ("Level") > 14) {
+				if (PlayerPrefs.GetInt ("Level") > 2) {
 						background5.GetComponent<Button> ().interactable = true;
 				}
 		}
