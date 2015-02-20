@@ -77,6 +77,7 @@ public class Timer : MonoBehaviour
 					score=baseScore;
 				}
 			}
+			text.rectTransform.position = new Vector3(400.0f, 160.0f,0.0f);
 			text.text="Base score: "+baseScore+"\nTime Bonus: "+(score-baseScore)+"\nTotal: "+score;
 
 			// add score to highscore if need be
