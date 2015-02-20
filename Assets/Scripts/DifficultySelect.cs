@@ -28,8 +28,8 @@ public class DifficultySelect : MonoBehaviour
 
 		public void HardMode ()
 		{
-			
-				Application.LoadLevel ("HardGame");
+				if (hardUnlocked)
+						Application.LoadLevel ("HardGame");
 		}
 
 		public void InsaneMode ()
@@ -60,5 +60,10 @@ public class DifficultySelect : MonoBehaviour
 						extra.GetComponent<Button> ().interactable = true;
 				}
 		}
+
+	public void ReturnToMenu ()
+	{
+		Application.LoadLevel ("title_screen");
+	}
 
 }
