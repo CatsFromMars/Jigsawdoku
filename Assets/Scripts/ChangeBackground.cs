@@ -19,6 +19,8 @@ public class ChangeBackground : MonoBehaviour
 		int currentBackground = 0;
 		public GameObject background;
 		
+		// text
+	public Text[] unlockText = new Text[5];
 		
 		void Awake ()
 		{	
@@ -26,21 +28,26 @@ public class ChangeBackground : MonoBehaviour
 						return;
 				if (PlayerPrefs.GetInt ("Level") > 2) {
 						background1.GetComponent<Button> ().interactable = true;
+			unlockText[0].enabled = false;
 				}
-				if (PlayerPrefs.GetInt ("Level") > 2) {
+				if (PlayerPrefs.GetInt ("Level") > 5) {
 						background2.GetComponent<Button> ().interactable = true;
+			unlockText[1].enabled = false;
 				}
 		
-				if (PlayerPrefs.GetInt ("Level") > 2) {
+				if (PlayerPrefs.GetInt ("Level") > 8) {
 						background3.GetComponent<Button> ().interactable = true;
+			unlockText[2].enabled = false;
 				}
 
-				if (PlayerPrefs.GetInt ("Level") > 2) {
+				if (PlayerPrefs.GetInt ("Level") > 11) {
 						background4.GetComponent<Button> ().interactable = true;
+			unlockText[3].enabled = false;
 				}
 
-				if (PlayerPrefs.GetInt ("Level") > 2) {
+				if (PlayerPrefs.GetInt ("Level") > 14) {
 						background5.GetComponent<Button> ().interactable = true;
+			unlockText[4].enabled = false;
 				}
 		}
 		// Use this for initialization

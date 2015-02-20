@@ -17,9 +17,9 @@ public class DifficultySelect : MonoBehaviour
 		public GameObject extra;
 
 		//TEXT
-		public Transform hardText;
-		public Transform lunaticText;
-		public Transform extraText;
+		public Text hardText;
+		public Text lunaticText;
+		public Text extraText;
 	       
 		public void EasyMode ()
 		{
@@ -55,29 +55,32 @@ public class DifficultySelect : MonoBehaviour
 
 		if(hardUnlocked) {
 			hard.GetComponent<Button>().interactable = true;
-			Destroy(hardText);
+			hardText.enabled = false;
 		}
 		if(lunaticUnlocked) {
 			hard.GetComponent<Button>().interactable = true;
-			Destroy(lunaticText);
+			lunaticText.enabled = false;
 		}
 		if(extraUnlocked) {
 			hard.GetComponent<Button>().interactable = true;
-			Destroy(extraText);
+			extraText.enabled = false;
 		}
 
 		if (PlayerPrefs.GetInt ("Level") > 4) {
 						hardUnlocked = true;
 						hard.GetComponent<Button> ().interactable = true;
+			hardText.enabled = false;
 				}
 				if (PlayerPrefs.GetInt ("Level") > 9) {
 						lunaticUnlocked = true;
 						lunatic.GetComponent<Button> ().interactable = true;
+			lunaticText.enabled = false;
 				}
 
 				if (PlayerPrefs.GetInt ("Level") > 14) {
 						extraUnlocked = true;
 						extra.GetComponent<Button> ().interactable = true;
+			extraText.enabled = false;
 				}
 
 		}
