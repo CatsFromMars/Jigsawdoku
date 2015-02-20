@@ -105,12 +105,8 @@ public class ChangeBackground : MonoBehaviour
 				background.renderer.material.mainTexture = textures [currentBackground];
 		}
 
-	public void ReturnToMenu ()
-	{
-		Application.LoadLevel ("title_screen");
-	}
 
-	public void ChangeBackgroundMeun ()
+	public void ChangeBackgroundMenu ()
 	{
 		Application.LoadLevel ("change_background");
 	}
