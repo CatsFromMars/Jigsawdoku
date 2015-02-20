@@ -10,7 +10,6 @@ public class LevelUp : MonoBehaviour
 		protected int currentExp = 0;
 		protected int maxExp = 0;
 		protected int currentLevel = 1;
-		
 		public Slider experienceBar;
 		public Text level; 
 		
@@ -34,7 +33,11 @@ public class LevelUp : MonoBehaviour
 				}
 				
 				experienceBar.value = (currentExp * 1.0f) / (maxExp * 1.0f);
-				level.text = "lv " + currentLevel.ToString ();
+				if (currentLevel < maxLevel)
+						level.text = "lv " + currentLevel.ToString ();
+				else {
+						level.text = "lv Max";
+				}
 
 
 		}
@@ -78,8 +81,12 @@ public class LevelUp : MonoBehaviour
 				PlayerPrefs.Save ();
 				// now just need to check 
 				experienceBar.value = (currentExp * 1.0f) / (maxExp * 1.0f);
-		level.text = "Lv " + currentLevel.ToString ();
-	}
+				if (currentLevel < maxLevel)
+						level.text = "lv " + currentLevel.ToString ();
+				else {
+						level.text = "lv Max";
+				}
+		}
 
 
 }

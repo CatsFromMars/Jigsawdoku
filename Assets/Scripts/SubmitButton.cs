@@ -143,8 +143,9 @@ public class SubmitButton : _PressableButton {
 		}
 
 		//WHEN THIS COROUTINE IS OVER, RESTART THE GAME!
-		yield return new WaitForSeconds(2.0f);
+		yield return new WaitForSeconds(4.0f);
 		Application.LoadLevel(Application.loadedLevel);
+		//Application.LoadLevel ("credits");
 
 	}
 

@@ -42,13 +42,13 @@ public class RandomPieceGenerator : MonoBehaviour
 				switch (difficulty) {
 				case Difficulty.Easy:
 						minPieceSize = 6;
-						maxPieceSize = 16;
+						maxPieceSize = 12;
 						GenerateRandomPieces ();
 						MakePieces (jigsawPieces, 3, 30, 3);
 						break;
 				case Difficulty.Normal:
 						minPieceSize = 5;
-						maxPieceSize = 16;
+						maxPieceSize = 10;
 						GenerateRandomPieces ();
 						MakePieces (jigsawPieces, 3, 30, 2);
 						break;
