@@ -13,7 +13,7 @@ public class LevelUp : MonoBehaviour
 		
 		public Slider experienceBar;
 		public Text level; 
-
+		
 		// Use this for initialization
 		void Start ()
 		{
