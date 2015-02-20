@@ -87,7 +87,7 @@ public class Timer : MonoBehaviour
 			}
 
 			// add exp to player's level
-			levelSystem.GetComponent<LevelUp> ().addExp (score/3);
+			levelSystem.GetComponent<LevelUp> ().addExp (score);
 		}
 	}
 }
