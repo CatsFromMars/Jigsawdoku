@@ -13,6 +13,11 @@ public class DifficultySelect : MonoBehaviour
 		public GameObject hard;
 		public GameObject lunatic;
 		public GameObject extra;
+
+		//TEXT
+		public Transform hardText;
+		public Transform lunaticText;
+		public Transform extraText;
 	       
         public void EasyMode ()
         {
@@ -43,6 +48,15 @@ public class DifficultySelect : MonoBehaviour
 		void Awake() {
 			if(hardUnlocked) {
 			hard.GetComponent<Button>().interactable = true;
+			Destroy(hardText);
+		}
+			if(lunaticUnlocked) {
+			hard.GetComponent<Button>().interactable = true;
+			Destroy(lunaticText);
+		}
+			if(extraUnlocked) {
+			hard.GetComponent<Button>().interactable = true;
+			Destroy(extraText);
 		}
 
 		}
