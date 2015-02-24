@@ -54,5 +54,11 @@ public class RetryButton : _PressableButton {
                 piece.transform.position = new Vector3(x, y, 0);
             }
         }
+
+        GameObject[] errors = GameObject.FindGameObjectsWithTag("Error");
+
+        foreach (GameObject error in errors) {
+            Object.Destroy(error);
+        }
     }
 }
