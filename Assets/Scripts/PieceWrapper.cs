@@ -34,6 +34,11 @@ public class PieceWrapper : MonoBehaviour {
     private bool snapped;
     private bool hint;
 
+	//for touch
+	private bool rotating;
+	private bool isHolding;
+	private Vector2 startVector;
+
     public void Awake() {
         boardContainer = GameObject.FindGameObjectWithTag("Board");
         boardWrapper = boardContainer.GetComponent<BoardWrapper>();
@@ -156,6 +161,71 @@ public class PieceWrapper : MonoBehaviour {
         if (rotateDelay > 0) {
             rotateDelay--;
         }
+
+		if (Input.touchCount > 0) {
+			if (Input.touchCount == 1) {
+				if(Input.GetTouch(0).phase == TouchPhase.Began){
+					//check for intersection, will also need to see if top piece, also global is holding
+					if(false)
+					{
+						snapped = false;
+						
+						Vector3 curScreenPoint = new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, 0);
+						Vector3 curPosition = Camera.main.ScreenToWorldPoint(curScreenPoint);
+						
+						float newX = Mathf.Clamp(curPosition.x - localMouseXY.x, -13, 13);
+						float newY = Mathf.Clamp(curPosition.y - localMouseXY.y, -10, 5);
+						
+						transform.position = new Vector3(newX, newY, -1);
+
+						
+						GameObject background = GameObject.FindGameObjectWithTag("BackgroundEffect");
+						BackgroundController backgroundController = background.GetComponent<BackgroundController>();
+						
+						backgroundController.setColor(ColorUtils.lightenColor(backColor, 0.2f));
+						
+						if(rotateDelay != 0) DestroyIcons();
+						else if(displayedRotationIconBottom == null && displayedRotationIconTop == null) DisplayIcons();
+					}
+				}
+				else if(Input.GetTouch(0).phase == TouchPhase.Ended && isHolding){
+
+				}
+				else if(Input.GetTouch(0).phase == TouchPhase.Moved && isHolding){
+					gameObject.SendMessage("OnMouseUp");
+					isHolding = false;
+				}
+
+				rotating = false;
+
+			} else if (Input.touchCount == 2) {
+				if(isHolding){
+					if(!rotating){
+						startVector = Input.GetTouch(1).position - Input.GetTouch (0).position;
+					}
+					else{
+						var currVector = Input.GetTouch(1).position - Input.GetTouch(0).position;
+						var angleOffset = Vector2.Angle(startVector, currVector);
+						var LR = Vector3.Cross(startVector, currVector);
+
+						if (angleOffset > 30) {
+							if (LR.z > 0) {
+								// Anticlockwise turn equal to angleOffset.
+								rotateCounterClockwise();
+							} else if (LR.z < 0) {
+								// Clockwise turn equal to angleOffset.
+								rotateClockwise();
+							}
+						}
+					}
+				}
+
+			}
+
+		} else {
+			rotating = false;
+			isHolding = false;
+		}
     }
 
 	void DisplayIcons() {
